@@ -1,0 +1,568 @@
+/* ============================================================
+   Fan Assistant Chat UI Styles
+   Scope: All classes prefixed with "fan-"
+   ============================================================ */
+
+/* ── Page Layout ──────────────────────────────────────────── */
+.fan-assistant-page {
+  min-height: 100dvh;
+  background: var(--color-dark-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.fan-assistant-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 0;
+  gap: 1.25rem;
+}
+
+/* ── Hero Banner ────────────────────────────────────────── */
+.fan-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 2rem;
+  border-radius: 1.25rem;
+  background: linear-gradient(
+    135deg,
+    hsl(222, 28%, 12%) 0%,
+    hsl(240, 25%, 14%) 50%,
+    hsl(260, 28%, 13%) 100%
+  );
+  border: 1px solid hsl(222, 20%, 22%);
+  position: relative;
+  overflow: hidden;
+}
+
+.fan-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at top right,
+    hsl(220, 95%, 55%, 0.12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.fan-hero__icon {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 12px hsl(220, 95%, 60%, 0.5));
+  flex-shrink: 0;
+}
+
+.fan-hero__content h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.25rem;
+}
+
+.fan-hero__content p {
+  font-size: 0.875rem;
+  color: hsl(220, 15%, 60%);
+  margin: 0;
+}
+
+.fan-hero__badge {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.fan-hero__badge-chip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.fan-hero__badge-chip--gemini {
+  background: hsl(260, 60%, 25%);
+  color: hsl(260, 90%, 80%);
+  border: 1px solid hsl(260, 60%, 40%);
+}
+
+.fan-hero__badge-chip--live {
+  background: hsl(145, 60%, 15%);
+  color: hsl(145, 70%, 65%);
+  border: 1px solid hsl(145, 60%, 35%);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.fan-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: hsl(145, 70%, 55%);
+  animation: fan-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── Chat Panel ──────────────────────────────────────────── */
+.fan-chat-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-radius: 1.25rem;
+  border: 1px solid hsl(222, 18%, 22%);
+  background: hsl(222, 22%, 10%);
+  overflow: hidden;
+  box-shadow:
+    0 4px 32px hsl(222, 30%, 5%, 0.6),
+    0 0 0 1px hsl(222, 25%, 18%, 0.4);
+  min-height: 0;
+}
+
+/* ── Chat Header ─────────────────────────────────────────── */
+.fan-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid hsl(222, 18%, 18%);
+  background: hsl(222, 25%, 11%);
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.fan-chat-header__orb {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(220, 95%, 55%), hsl(260, 90%, 65%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 16px hsl(220, 95%, 55%, 0.45);
+  animation: fan-orb-glow 3s ease-in-out infinite;
+}
+
+.fan-chat-header__orb-inner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fan-orb-glow {
+  0%, 100% { box-shadow: 0 0 16px hsl(220, 95%, 55%, 0.45); }
+  50% { box-shadow: 0 0 28px hsl(260, 90%, 65%, 0.6); }
+}
+
+.fan-chat-header__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.fan-chat-header__subtitle {
+  font-size: 0.72rem;
+  color: hsl(220, 15%, 55%);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.fan-online-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: hsl(145, 70%, 55%);
+  flex-shrink: 0;
+  animation: fan-pulse 1.8s ease-in-out infinite;
+}
+
+.fan-chat-header__thinking {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: hsl(220, 80%, 68%);
+}
+
+.fan-chat-header__thinking-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: hsl(220, 80%, 68%);
+  animation: fan-pulse 0.9s ease-in-out infinite;
+}
+
+.fan-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(222, 18%, 24%);
+  background: hsl(222, 22%, 15%);
+  color: hsl(220, 15%, 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.fan-icon-btn:hover:not(:disabled) {
+  background: hsl(222, 22%, 20%);
+  color: hsl(220, 15%, 80%);
+  border-color: hsl(222, 18%, 32%);
+}
+
+.fan-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Messages List ───────────────────────────────────────── */
+.fan-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.25rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  scroll-behavior: smooth;
+  min-height: 0;
+}
+
+/* ── Message Bubbles ─────────────────────────────────────── */
+.fan-chat-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.fan-chat-bubble--user {
+  background: linear-gradient(135deg, hsl(220, 95%, 42%), hsl(240, 90%, 50%));
+  color: #ffffff;
+  border-bottom-right-radius: 0.25rem;
+  box-shadow: 0 2px 12px hsl(220, 95%, 42%, 0.35);
+}
+
+.fan-chat-bubble--assistant {
+  background: hsl(222, 22%, 15%);
+  color: #e2e8f0;
+  border: 1px solid hsl(222, 18%, 22%);
+  border-bottom-left-radius: 0.25rem;
+}
+
+.fan-chat-bubble--emergency {
+  background: hsl(0, 40%, 14%);
+  color: #fecaca;
+  border: 1px solid hsl(0, 60%, 35%);
+  border-bottom-left-radius: 0.25rem;
+  box-shadow: 0 2px 12px hsl(0, 60%, 35%, 0.3);
+}
+
+/* ── Agent Badge ─────────────────────────────────────────── */
+.fan-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+
+.fan-badge--fan         { background: hsl(220, 50%, 18%); color: hsl(220, 80%, 72%); border: 1px solid hsl(220, 50%, 30%); }
+.fan-badge--navigation  { background: hsl(180, 50%, 14%); color: hsl(180, 70%, 68%); border: 1px solid hsl(180, 50%, 28%); }
+.fan-badge--crowd       { background: hsl(280, 40%, 16%); color: hsl(280, 70%, 72%); border: 1px solid hsl(280, 40%, 30%); }
+.fan-badge--emergency   { background: hsl(0,   50%, 16%); color: hsl(0,   80%, 72%); border: 1px solid hsl(0,   60%, 35%); }
+.fan-badge--volunteer   { background: hsl(40,  50%, 14%); color: hsl(40,  80%, 68%); border: 1px solid hsl(40,  50%, 28%); }
+.fan-badge--translation { background: hsl(145, 40%, 14%); color: hsl(145, 70%, 64%); border: 1px solid hsl(145, 45%, 28%); }
+.fan-badge--operations  { background: hsl(200, 40%, 14%); color: hsl(200, 70%, 68%); border: 1px solid hsl(200, 45%, 28%); }
+
+/* ── Actions triggered tags ─────────────────────────────── */
+.fan-actions-triggered {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.fan-action-tag {
+  font-size: 0.66rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: hsl(0, 50%, 16%);
+  color: hsl(0, 80%, 72%);
+  border: 1px solid hsl(0, 60%, 30%);
+}
+
+/* ── Markdown rendered content ──────────────────────────── */
+.fan-md-p  { margin: 0 0 0.35rem; }
+.fan-md-p:last-child { margin-bottom: 0; }
+.fan-md-h2 { font-size: 0.95rem; font-weight: 700; margin: 0.6rem 0 0.35rem; color: #f1f5f9; }
+.fan-md-h3 { font-size: 0.875rem; font-weight: 600; margin: 0.5rem 0 0.25rem; color: #cbd5e1; }
+.fan-md-list { margin: 0.25rem 0 0.35rem 1.1rem; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.fan-md-list li { list-style: disc; }
+.fan-md-code { font-family: monospace; font-size: 0.82em; background: hsl(222, 22%, 20%); padding: 0.1em 0.35em; border-radius: 0.25rem; color: hsl(220, 80%, 72%); }
+.fan-md-table-wrap { overflow-x: auto; margin: 0.4rem 0; border-radius: 0.5rem; border: 1px solid hsl(222, 18%, 24%); }
+.fan-md-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.fan-md-table th { padding: 0.5rem 0.75rem; background: hsl(222, 22%, 18%); color: hsl(220, 15%, 75%); font-weight: 600; text-align: left; border-bottom: 1px solid hsl(222, 18%, 24%); }
+.fan-md-table td { padding: 0.45rem 0.75rem; border-bottom: 1px solid hsl(222, 18%, 20%); color: #cbd5e1; }
+.fan-md-table tr:last-child td { border-bottom: none; }
+
+/* ── Typing Indicator ────────────────────────────────────── */
+.fan-typing-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.25rem 0.125rem;
+}
+
+.fan-typing-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: hsl(220, 60%, 60%);
+  display: block;
+  animation: fan-bounce 1.2s ease-in-out infinite;
+}
+
+@keyframes fan-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ── Quick Action Chips ──────────────────────────────────── */
+.fan-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid hsl(222, 18%, 18%);
+  flex-shrink: 0;
+}
+
+.fan-quick-actions::-webkit-scrollbar { display: none; }
+
+.fan-quick-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.875rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+}
+
+.fan-quick-chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fan-quick-chip--default {
+  background: hsl(222, 22%, 17%);
+  color: hsl(220, 20%, 75%);
+  border-color: hsl(222, 18%, 26%);
+}
+.fan-quick-chip--default:hover:not(:disabled) {
+  background: hsl(222, 22%, 22%);
+  border-color: hsl(222, 18%, 34%);
+  color: #f1f5f9;
+}
+
+.fan-quick-chip--info {
+  background: hsl(220, 50%, 16%);
+  color: hsl(220, 80%, 72%);
+  border-color: hsl(220, 50%, 28%);
+}
+.fan-quick-chip--info:hover:not(:disabled) {
+  background: hsl(220, 55%, 22%);
+  border-color: hsl(220, 60%, 40%);
+  box-shadow: 0 0 0 3px hsl(220, 95%, 55%, 0.12);
+}
+
+.fan-quick-chip--success {
+  background: hsl(145, 45%, 13%);
+  color: hsl(145, 70%, 64%);
+  border-color: hsl(145, 45%, 25%);
+}
+.fan-quick-chip--success:hover:not(:disabled) {
+  background: hsl(145, 45%, 18%);
+  border-color: hsl(145, 55%, 35%);
+  box-shadow: 0 0 0 3px hsl(145, 70%, 55%, 0.12);
+}
+
+.fan-quick-chip--emergency {
+  background: hsl(0, 50%, 15%);
+  color: hsl(0, 80%, 72%);
+  border-color: hsl(0, 60%, 32%);
+}
+.fan-quick-chip--emergency:hover:not(:disabled) {
+  background: hsl(0, 55%, 20%);
+  border-color: hsl(0, 65%, 42%);
+  box-shadow: 0 0 0 3px hsl(0, 70%, 50%, 0.15);
+}
+
+.fan-quick-chip__icon { font-size: 0.9rem; }
+.fan-quick-chip__label { font-size: 0.8rem; }
+
+/* ── Chat Input ──────────────────────────────────────────── */
+.fan-chat-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid hsl(222, 18%, 18%);
+  background: hsl(222, 22%, 10%);
+  flex-shrink: 0;
+}
+
+.fan-chat-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.625rem;
+  background: hsl(222, 22%, 14%);
+  border: 1px solid hsl(222, 18%, 22%);
+  border-radius: 0.875rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.fan-chat-input-row:focus-within {
+  border-color: hsl(220, 70%, 50%);
+  box-shadow: 0 0 0 3px hsl(220, 95%, 55%, 0.12);
+}
+
+.fan-chat-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.fan-chat-textarea::placeholder {
+  color: hsl(220, 15%, 45%);
+}
+
+.fan-chat-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fan-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 0.625rem;
+  background: linear-gradient(135deg, hsl(220, 95%, 52%), hsl(255, 85%, 60%));
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px hsl(220, 95%, 52%, 0.4);
+}
+
+.fan-send-btn:hover:not(:disabled) {
+  transform: scale(1.06);
+  box-shadow: 0 4px 16px hsl(220, 95%, 52%, 0.55);
+}
+
+.fan-send-btn:disabled {
+  background: hsl(222, 18%, 24%);
+  color: hsl(220, 15%, 45%);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.fan-send-btn__spinner {
+  width: 18px;
+  height: 18px;
+  animation: fan-spin 0.8s linear infinite;
+}
+
+@keyframes fan-spin {
+  to { transform: rotate(360deg); }
+}
+
+.fan-chat-input-hint {
+  font-size: 0.7rem;
+  color: hsl(220, 15%, 40%);
+  text-align: center;
+  margin: 0;
+}
+
+.fan-chat-input-hint kbd {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 0.65rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  background: hsl(222, 18%, 18%);
+  border: 1px solid hsl(222, 18%, 28%);
+  color: hsl(220, 15%, 60%);
+}
+
+/* ── Shared Animations ───────────────────────────────────── */
+@keyframes fan-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+@keyframes fan-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply entrance animation to each message */
+.fan-messages > * {
+  animation: fan-fade-in 0.22s ease both;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .fan-assistant-body { padding: 0.75rem 0.75rem 0; }
+  .fan-hero { padding: 1rem 1.25rem; gap: 0.875rem; }
+  .fan-hero__icon { font-size: 1.75rem; }
+  .fan-hero__content h2 { font-size: 1.1rem; }
+  .fan-hero__badge { display: none; }
+  .fan-chat-header { padding: 0.875rem 1rem; }
+  .fan-messages { padding: 1rem; gap: 1rem; }
+  .fan-quick-actions { padding: 0.75rem 1rem; }
+  .fan-chat-input-wrap { padding: 0.625rem 0.875rem 0.875rem; }
+}

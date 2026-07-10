@@ -19,6 +19,7 @@ export function useNavigation() {
     }));
 
     const route = await searchDestination(query);
+    console.log(route);
 
     setState((prev) => ({
       ...prev,

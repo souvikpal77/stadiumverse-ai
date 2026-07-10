@@ -8,11 +8,15 @@ import React, { useState } from 'react';
 import LandingPage from './pages/LandingPage';
 import FanAssistantPage from './pages/FanAssistantPage';
 import SmartNavigationPage from './pages/SmartNavigationPage';
+import CrowdIntelligencePage from "./pages/CrowdIntelligencePage";
+import EmergencyAssistantPage from "./pages/EmergencyAssistantPage";
 
 export type AppRoute =
   | 'home'
   | 'fan-assistant'
-  | 'smart-navigation';
+  | 'smart-navigation'
+  | 'crowd-intelligence'
+  | 'emergency-assistant';
 
 export default function App() {
   const [route, setRoute] = useState<AppRoute>(() => {
@@ -22,6 +26,12 @@ export default function App() {
 
     case '#/smart-navigation':
       return 'smart-navigation';
+
+    case '#/crowd-intelligence':
+      return 'crowd-intelligence';
+
+    case '#/emergency-assistant':
+      return 'emergency-assistant';
 
     default:
       return 'home';
@@ -40,6 +50,12 @@ export default function App() {
 
   case 'smart-navigation':
     return <SmartNavigationPage />;
+
+  case 'crowd-intelligence':
+    return <CrowdIntelligencePage />;
+
+  case 'emergency-assistant':
+    return <EmergencyAssistantPage />;
 
   default:
     return <LandingPage onNavigate={navigate} />;

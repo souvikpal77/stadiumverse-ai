@@ -24,9 +24,26 @@ export default function Navbar({ onNavigate }: NavbarProps) {
       </div>
 
       <div className="hidden md:flex items-center gap-8 text-gray-300">
-        <a href="#" className="hover:text-blue-400 transition-colors">Home</a>
-        <a href="#features" className="hover:text-blue-400 transition-colors">Features</a>
-        <a href="#ai-modules" className="hover:text-blue-400 transition-colors">AI Agents</a>
+        <a href="#" className="hover:text-blue-400 transition-colors">
+          Home
+        </a>
+
+        <a href="#features" className="hover:text-blue-400 transition-colors">
+          Features
+        </a>
+
+        <a href="#ai-modules" className="hover:text-blue-400 transition-colors">
+          AI Agents
+        </a>
+
+        <button
+          id="nav-smart-navigation-link"
+          onClick={() => onNavigate?.('smart-navigation')}
+          className="hover:text-blue-400 transition-colors text-gray-300 font-medium"
+        >
+          Smart Navigation
+        </button>
+
         <button
           id="nav-fan-assistant-link"
           onClick={() => onNavigate?.('fan-assistant')}

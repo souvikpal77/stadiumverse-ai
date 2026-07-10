@@ -14,9 +14,9 @@ export default function AIModules({ onNavigate }: AIModulesProps) {
       highlight: true,
     },
     {
-      title: "🗺️ Smart Navigation",
-      description: "Guide visitors to seats, gates and facilities.",
-      route: undefined,
+  title: "🗺️ Smart Navigation",
+  description: "Guide visitors to seats, gates and facilities.",
+  route: 'smart-navigation' as AppRoute,
     },
     {
       title: "👮 Crowd Intelligence",

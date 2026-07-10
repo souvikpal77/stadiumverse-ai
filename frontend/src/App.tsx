@@ -7,15 +7,26 @@
 import React, { useState } from 'react';
 import LandingPage from './pages/LandingPage';
 import FanAssistantPage from './pages/FanAssistantPage';
+import SmartNavigationPage from './pages/SmartNavigationPage';
 
-export type AppRoute = 'home' | 'fan-assistant';
+export type AppRoute =
+  | 'home'
+  | 'fan-assistant'
+  | 'smart-navigation';
 
 export default function App() {
   const [route, setRoute] = useState<AppRoute>(() => {
-    // Read initial route from hash for simple deep-link support
-    if (window.location.hash === '#/fan-assistant') return 'fan-assistant';
-    return 'home';
-  });
+  switch (window.location.hash) {
+    case '#/fan-assistant':
+      return 'fan-assistant';
+
+    case '#/smart-navigation':
+      return 'smart-navigation';
+
+    default:
+      return 'home';
+  }
+});
 
   const navigate = (to: AppRoute) => {
     setRoute(to);
@@ -24,9 +35,13 @@ export default function App() {
   };
 
   switch (route) {
-    case 'fan-assistant':
-      return <FanAssistantPage onBack={() => navigate('home')} />;
-    default:
-      return <LandingPage onNavigate={navigate} />;
-  }
+  case 'fan-assistant':
+    return <FanAssistantPage onBack={() => navigate('home')} />;
+
+  case 'smart-navigation':
+    return <SmartNavigationPage />;
+
+  default:
+    return <LandingPage onNavigate={navigate} />;
+}
 }

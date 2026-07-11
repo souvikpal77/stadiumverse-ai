@@ -1,6 +1,9 @@
 import React from "react";
 import { useAI } from "../context/AIContext";
 
+import AICommandCenter from "../components/dashboard/AICommandCenter";
+import AIOperationsCenter from "../components/dashboard/AIOperationsCenter";
+import AIScenarioSimulator from "../components/dashboard/AIScenarioSimulator";
 import NotificationPanel from "../components/dashboard/NotificationPanel";
 import MatchCenter from "../components/dashboard/MatchCenter";
 import CrowdAnalyticsChart from "../components/dashboard/CrowdAnalyticsChart";
@@ -48,6 +51,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="max-w-7xl mx-auto p-8 space-y-8">
+
+        <AICommandCenter />
+        <AIOperationsCenter />
+        <AIScenarioSimulator />
 
         {/* Live Cards */}
 

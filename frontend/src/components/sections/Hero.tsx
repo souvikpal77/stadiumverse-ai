@@ -1,5 +1,5 @@
-import React from 'react';
-import type { AppRoute } from '../../App';
+import React from "react";
+import type { AppRoute } from "../../App";
 
 interface HeroProps {
   onNavigate?: (route: AppRoute) => void;
@@ -25,18 +25,24 @@ export default function Hero({ onNavigate }: HeroProps) {
         Generative AI, real-time insights, and intelligent assistants.
       </p>
 
-      <div className="mt-10 flex justify-center gap-4">
+      <div className="mt-10 flex flex-wrap justify-center gap-4">
+
+        {/* Fan Assistant */}
         <button
-          id="hero-explore-btn"
-          onClick={() => onNavigate?.('fan-assistant')}
+          onClick={() => onNavigate?.("fan-assistant")}
           className="bg-gradient-to-r from-blue-600 to-violet-700 hover:from-blue-500 hover:to-violet-600 px-6 py-3 rounded-xl font-semibold text-white transition-all shadow-lg shadow-blue-600/25"
         >
-          Try Fan Assistant
+          🤖 Try Fan Assistant
         </button>
 
-        <button className="border border-gray-600 hover:border-blue-500 px-6 py-3 rounded-xl transition-colors">
-          View Architecture
+        {/* Dashboard */}
+        <button
+          onClick={() => onNavigate?.("dashboard")}
+          className="border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white px-6 py-3 rounded-xl font-semibold transition-all"
+        >
+          🚀 Launch AI Command Center
         </button>
+
       </div>
     </section>
   );

@@ -58,12 +58,81 @@ const destinations: Destination[] = [
 ];
 
 export async function searchDestination(
-  query: string
+  query: string,
+  scenario: string = "Normal"
 ): Promise<RouteInfo | null> {
+
   await new Promise((resolve) => setTimeout(resolve, 700));
 
+  const lower = query.toLowerCase();
+
+  /* ==========================
+     AI SMART ROUTING
+  ===========================*/
+
+  if (scenario === "High Crowd" && lower.includes("gate a")) {
+    const gateB = destinations.find((d) => d.id === "gate-b")!;
+
+    return {
+      destination: gateB,
+      steps: [
+        "⚠ Gate A is heavily crowded.",
+        "AI recommends using Gate B.",
+        "Walk 80 meters to the east.",
+        "Follow the blue smart navigation signs.",
+        "Estimated time saved: 3 minutes.",
+        "You have reached Gate B.",
+      ],
+    };
+  }
+
+  if (scenario === "Fire Alarm") {
+    const exit = destinations.find((d) => d.id === "gate-a")!;
+
+    return {
+      destination: exit,
+      steps: [
+        "🔥 Fire alarm detected.",
+        "Emergency evacuation activated.",
+        "Proceed calmly to Exit A.",
+        "Follow emergency lights.",
+        "Security staff will assist you.",
+      ],
+    };
+  }
+
+  if (scenario === "Medical Emergency") {
+    const medical = destinations.find((d) => d.id === "washroom-1")!;
+
+    return {
+      destination: medical,
+      steps: [
+        "🚑 Medical assistance requested.",
+        "Proceed to the Medical Help Point.",
+        "Follow the green emergency signs.",
+      ],
+    };
+  }
+
+  if (scenario === "Heavy Rain") {
+    const covered = destinations.find((d) => d.id === "gate-b")!;
+
+    return {
+      destination: covered,
+      steps: [
+        "🌧 Heavy rain detected.",
+        "AI selected the nearest covered entrance.",
+        "Use Gate B.",
+      ],
+    };
+  }
+
+  /* ==========================
+      NORMAL SEARCH
+  ===========================*/
+
   const result = destinations.find((item) =>
-    item.title.toLowerCase().includes(query.toLowerCase())
+    item.title.toLowerCase().includes(lower)
   );
 
   if (!result) return null;

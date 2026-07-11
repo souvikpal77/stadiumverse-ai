@@ -1,63 +1,84 @@
 // ──────────────────────────────────────────────────────────────
-//  App.tsx – Root application with simple client-side routing
-//  Uses a state-based router so it works even without an
-//  external router package. Can be upgraded to react-router-dom
-//  by replacing this file once the package is installed.
+// App.tsx
 // ──────────────────────────────────────────────────────────────
-import React, { useState } from 'react';
-import LandingPage from './pages/LandingPage';
-import FanAssistantPage from './pages/FanAssistantPage';
-import SmartNavigationPage from './pages/SmartNavigationPage';
+
+import React, { useState } from "react";
+
+import LandingPage from "./pages/LandingPage";
+import DashboardPage from "./pages/DashboardPage";
+import FanAssistantPage from "./pages/FanAssistantPage";
+import SmartNavigationPage from "./pages/SmartNavigationPage";
 import CrowdIntelligencePage from "./pages/CrowdIntelligencePage";
 import EmergencyAssistantPage from "./pages/EmergencyAssistantPage";
 
 export type AppRoute =
-  | 'home'
-  | 'fan-assistant'
-  | 'smart-navigation'
-  | 'crowd-intelligence'
-  | 'emergency-assistant';
+  | "home"
+  | "dashboard"
+  | "fan-assistant"
+  | "smart-navigation"
+  | "crowd-intelligence"
+  | "emergency-assistant";
 
 export default function App() {
   const [route, setRoute] = useState<AppRoute>(() => {
-  switch (window.location.hash) {
-    case '#/fan-assistant':
-      return 'fan-assistant';
+    switch (window.location.hash) {
+      case "#/dashboard":
+        return "dashboard";
 
-    case '#/smart-navigation':
-      return 'smart-navigation';
+      case "#/fan-assistant":
+        return "fan-assistant";
 
-    case '#/crowd-intelligence':
-      return 'crowd-intelligence';
+      case "#/smart-navigation":
+        return "smart-navigation";
 
-    case '#/emergency-assistant':
-      return 'emergency-assistant';
+      case "#/crowd-intelligence":
+        return "crowd-intelligence";
 
-    default:
-      return 'home';
-  }
-});
+      case "#/emergency-assistant":
+        return "emergency-assistant";
+
+      default:
+        return "home";
+    }
+  });
 
   const navigate = (to: AppRoute) => {
     setRoute(to);
-    window.location.hash = to === 'home' ? '' : `#/${to}`;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    window.location.hash =
+      to === "home" ? "" : `#/${to}`;
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   switch (route) {
-  case 'fan-assistant':
-    return <FanAssistantPage onBack={() => navigate('home')} />;
+    case "dashboard":
+      return <DashboardPage />;
 
-  case 'smart-navigation':
-    return <SmartNavigationPage />;
+    case "fan-assistant":
+      return (
+        <FanAssistantPage
+          onBack={() => navigate("home")}
+        />
+      );
 
-  case 'crowd-intelligence':
-    return <CrowdIntelligencePage />;
+    case "smart-navigation":
+      return <SmartNavigationPage />;
 
-  case 'emergency-assistant':
-    return <EmergencyAssistantPage />;
+    case "crowd-intelligence":
+      return <CrowdIntelligencePage />;
 
-  default:
-    return <LandingPage onNavigate={navigate} />;
-}
+    case "emergency-assistant":
+      return <EmergencyAssistantPage />;
+
+    default:
+      return (
+        <LandingPage
+          onNavigate={navigate}
+        />
+      );
+  }
 }

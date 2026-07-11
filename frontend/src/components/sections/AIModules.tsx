@@ -32,15 +32,17 @@ export default function AIModules({ onNavigate }: AIModulesProps) {
   highlight: true,
 },
     {
-      title: "🌍 Live Translation",
-      description: "Support multiple languages for international visitors.",
-      route: undefined,
-    },
+  title: "🌍 Live Translation",
+  description: "Support multiple languages for international visitors.",
+  route: "translation-assistant" as AppRoute,
+  highlight: true,
+},
     {
-      title: "🙋 Volunteer Assistant",
-      description: "Help volunteers receive tasks and updates in real time.",
-      route: undefined,
-    }
+  title: "🙋 Volunteer Assistant",
+  description: "Help volunteers receive AI tasks, alerts, and checkpoint updates.",
+  route: "volunteer-assistant" as AppRoute,
+  highlight: true,
+}
   ];
 
   return (

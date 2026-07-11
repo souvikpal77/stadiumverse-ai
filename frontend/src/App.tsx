@@ -10,6 +10,8 @@ import FanAssistantPage from "./pages/FanAssistantPage";
 import SmartNavigationPage from "./pages/SmartNavigationPage";
 import CrowdIntelligencePage from "./pages/CrowdIntelligencePage";
 import EmergencyAssistantPage from "./pages/EmergencyAssistantPage";
+import TranslationAssistantPage from "./pages/TranslationAssistantPage";
+import VolunteerAssistantPage from "./pages/VolunteerAssistantPage";
 
 export type AppRoute =
   | "home"
@@ -17,7 +19,9 @@ export type AppRoute =
   | "fan-assistant"
   | "smart-navigation"
   | "crowd-intelligence"
-  | "emergency-assistant";
+  | "emergency-assistant"
+  | "translation-assistant"
+  | "volunteer-assistant";
 
 export default function App() {
   const [route, setRoute] = useState<AppRoute>(() => {
@@ -36,6 +40,12 @@ export default function App() {
 
       case "#/emergency-assistant":
         return "emergency-assistant";
+
+      case "#/translation-assistant":
+        return "translation-assistant";
+
+      case "#/volunteer-assistant":
+        return "volunteer-assistant";
 
       default:
         return "home";
@@ -73,6 +83,12 @@ export default function App() {
 
     case "emergency-assistant":
       return <EmergencyAssistantPage />;
+
+    case "translation-assistant":
+      return <TranslationAssistantPage />;
+
+    case "volunteer-assistant":
+      return <VolunteerAssistantPage />;
 
     default:
       return (

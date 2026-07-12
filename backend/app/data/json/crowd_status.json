@@ -1,0 +1,22 @@
+{
+  "Gate A": {
+    "crowd": "Low",
+    "wait": "2 min",
+    "density": 18
+  },
+  "Gate B": {
+    "crowd": "Medium",
+    "wait": "5 min",
+    "density": 42
+  },
+  "Gate C": {
+    "crowd": "High",
+    "wait": "12 min",
+    "density": 87
+  },
+  "Gate D": {
+    "crowd": "Low",
+    "wait": "1 min",
+    "density": 12
+  }
+}

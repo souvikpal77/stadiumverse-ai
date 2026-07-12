@@ -1,9 +1,11 @@
 import os
 import logging
 from typing import Optional
+
 from app.services.gemini import get_gemini_model
 
 logger = logging.getLogger("stadiumverse.agents.base")
+
 
 class BaseAgent:
     def __init__(self, name: str, prompt_file: Optional[str] = None):
@@ -12,44 +14,75 @@ class BaseAgent:
 
     def _load_prompt_template(self, prompt_file: Optional[str]) -> str:
         """
-        Helper to read instructions from backend/prompts/ directory.
-        Falls back to a default system instruction if file is missing.
+        Reads the system prompt from backend/prompts/.
+        Falls back to a default prompt if the file is missing.
         """
+
         if not prompt_file:
             return f"You are the {self.name} Agent for StadiumVerse AI."
 
-        # Compute path relative to backend root
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        base_dir = os.path.dirname(
+            os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__))
+            )
+        )
+
         prompt_path = os.path.join(base_dir, "prompts", prompt_file)
 
         if not os.path.exists(prompt_path):
-            logger.warning(f"System instructions file not found at: {prompt_path}. Using base fallback.")
+            logger.warning(
+                f"Prompt file not found: {prompt_path}. Using default prompt."
+            )
             return f"You are the {self.name} Agent for StadiumVerse AI."
 
         try:
-            with open(prompt_path, "r", encoding="utf-8") as f:
-                return f.read().strip()
+            with open(prompt_path, "r", encoding="utf-8") as file:
+                return file.read().strip()
+
         except Exception as e:
-            logger.error(f"Error loading system prompt file '{prompt_file}': {e}")
+            logger.exception(e)
             return f"You are the {self.name} Agent for StadiumVerse AI."
 
     async def execute(self, user_message: str, context: dict = None) -> str:
         """
-        Processes user query using Gemini API.
-        Can be overridden by sub-agents to handle specialized tools/APIs.
+        Executes the agent using Gemini.
         """
-        # Package supplementary state context in prompt if available
+
         context_str = ""
+
         if context:
-            context_str = f"\n\n[Active Session Context]\n{context}"
+            context_str = f"\n\n[Context]\n{context}"
 
         prompt = f"{user_message}{context_str}"
-        
+
         try:
-            # Instantiate client model with system instruction template
-            model = get_gemini_model(system_instruction=self.system_instruction)
+            model = get_gemini_model(
+                system_instruction=self.system_instruction
+            )
+
             response = model.generate_content(prompt)
-            return response.text
+
+            if hasattr(response, "text") and response.text:
+                return response.text
+
+            return "The AI returned an empty response."
+
         except Exception as e:
-            logger.error(f"Execution failed inside Agent '{self.name}': {e}")
-            return f"An error occurred within the {self.name} Agent while processing your request."
+            logger.exception(
+                f"Execution failed inside Agent '{self.name}'"
+            )
+
+            return f"""
+===========================
+AGENT ERROR
+===========================
+
+Agent:
+{self.name}
+
+Exception:
+{type(e).__name__}
+
+Details:
+{str(e)}
+"""

@@ -1,0 +1,26 @@
+{
+  "Camera 12": {
+    "status": "Online",
+    "location": "Gate A"
+  },
+  "Scanner A": {
+    "status": "Operational",
+    "location": "Gate A"
+  },
+  "Scanner B": {
+    "status": "Operational",
+    "location": "Gate B"
+  },
+  "HVAC": {
+    "status": "Running",
+    "location": "Central Control Room"
+  },
+  "Generator": {
+    "status": "Running",
+    "location": "Basement"
+  },
+  "Water Pump": {
+    "status": "Operational",
+    "location": "Utility Block"
+  }
+}

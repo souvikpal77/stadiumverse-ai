@@ -1,0 +1,17 @@
+{
+  "Parking A": {
+    "available": 142,
+    "total": 200,
+    "status": "Available"
+  },
+  "Parking B": {
+    "available": 22,
+    "total": 180,
+    "status": "Almost Full"
+  },
+  "VIP Parking": {
+    "available": 9,
+    "total": 50,
+    "status": "Limited"
+  }
+}

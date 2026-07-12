@@ -10,7 +10,15 @@ export interface ChatRequestPayload {
 
 export interface ChatResponsePayload {
   session_id: string
-  agent_resolved: 'crowd' | 'navigation' | 'operations' | 'emergency' | 'volunteer' | 'translation' | 'fan' | string
+  agent_resolved:
+    | 'crowd'
+    | 'navigation'
+    | 'operations'
+    | 'emergency'
+    | 'volunteer'
+    | 'translation'
+    | 'fan'
+    | string
   response: string
   actions_triggered: string[]
 }
@@ -26,13 +34,19 @@ export interface TranslationResponsePayload {
   target_language: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
 
 export const AIService = {
   /**
-   * Conveys fan/staff queries to the backend AI agent router.
+   * Sends a chat message to the AI backend.
    */
   async chat(payload: ChatRequestPayload): Promise<ChatResponsePayload> {
+    console.log("================================");
+    console.log("📤 REQUEST TO BACKEND");
+    console.log(payload);
+    console.log("================================");
+
     const response = await fetch(`${API_BASE_URL}/ai/chat`, {
       method: 'POST',
       headers: {
@@ -43,16 +57,31 @@ export const AIService = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData?.detail || 'Failed to communicate with AI Agents.')
+
+      console.error("❌ Backend Error:", errorData)
+
+      throw new Error(
+        errorData?.detail || 'Failed to communicate with AI Agents.'
+      )
     }
 
-    return response.json()
+    const data: ChatResponsePayload = await response.json()
+
+    console.log("================================");
+    console.log("✅ BACKEND RESPONSE");
+    console.log(data);
+    console.log("Agent:", data.agent_resolved);
+    console.log("================================");
+
+    return data
   },
 
   /**
-   * Directly routes a text string to the backend's translation agent.
+   * Translation endpoint.
    */
-  async translate(payload: TranslationRequestPayload): Promise<TranslationResponsePayload> {
+  async translate(
+    payload: TranslationRequestPayload
+  ): Promise<TranslationResponsePayload> {
     const response = await fetch(`${API_BASE_URL}/ai/translate`, {
       method: 'POST',
       headers: {
@@ -63,16 +92,22 @@ export const AIService = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData?.detail || 'Translation request failed.')
+      throw new Error(
+        errorData?.detail || 'Translation request failed.'
+      )
     }
 
-    return response.json()
+    return await response.json()
   },
 
   /**
-   * Emergency escalation route bypassing soft conversation rules.
+   * Emergency endpoint.
    */
-  async reportEmergency(payload: ChatRequestPayload): Promise<ChatResponsePayload> {
+  async reportEmergency(
+    payload: ChatRequestPayload
+  ): Promise<ChatResponsePayload> {
+    console.log("🚨 Emergency Request", payload)
+
     const response = await fetch(`${API_BASE_URL}/ai/emergency`, {
       method: 'POST',
       headers: {
@@ -83,10 +118,17 @@ export const AIService = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData?.detail || 'Failed to dispatch emergency services.')
+      throw new Error(
+        errorData?.detail || 'Failed to dispatch emergency services.'
+      )
     }
 
-    return response.json()
+    const data: ChatResponsePayload = await response.json()
+
+    console.log("🚨 Emergency Response", data)
+
+    return data
   },
 }
+
 export default AIService

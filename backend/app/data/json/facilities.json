@@ -1,0 +1,22 @@
+{
+  "Food Court": {
+    "location": "Level 2, Corridor 2",
+    "distance": "35 m",
+    "floor": "2"
+  },
+  "Medical Center": {
+    "location": "Ground Floor",
+    "distance": "45 m",
+    "floor": "1"
+  },
+  "ATM": {
+    "location": "Near Gate B",
+    "distance": "20 m",
+    "floor": "1"
+  },
+  "Restroom": {
+    "location": "Every Corridor",
+    "distance": "15-25 m",
+    "floor": "All Floors"
+  }
+}

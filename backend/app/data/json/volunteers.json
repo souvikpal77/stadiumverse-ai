@@ -1,0 +1,22 @@
+{
+  "Gate A": {
+    "volunteer": "Rahul",
+    "task": "Ticket Verification"
+  },
+  "Gate B": {
+    "volunteer": "Priya",
+    "task": "Crowd Guidance"
+  },
+  "Food Court": {
+    "volunteer": "Aman",
+    "task": "Food Assistance"
+  },
+  "Medical Center": {
+    "volunteer": "Sneha",
+    "task": "Emergency Support"
+  },
+  "VIP Entrance": {
+    "volunteer": "Rohit",
+    "task": "VIP Assistance"
+  }
+}

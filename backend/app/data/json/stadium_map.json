@@ -1,0 +1,29 @@
+{
+  "A1": {
+    "gate": "Gate A",
+    "corridor": "Corridor 1",
+    "walk_time": "3 min",
+    "restroom": "15 m",
+    "food_court": "30 m",
+    "medical": "40 m",
+    "accessible": true
+  },
+  "A4": {
+    "gate": "Gate A",
+    "corridor": "Corridor 2",
+    "walk_time": "5 min",
+    "restroom": "20 m",
+    "food_court": "35 m",
+    "medical": "45 m",
+    "accessible": true
+  },
+  "B2": {
+    "gate": "Gate B",
+    "corridor": "Corridor 4",
+    "walk_time": "4 min",
+    "restroom": "18 m",
+    "food_court": "25 m",
+    "medical": "55 m",
+    "accessible": true
+  }
+}

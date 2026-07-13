@@ -1,113 +1,362 @@
 import logging
 from datetime import datetime, timezone
+
 from fastapi import APIRouter, HTTPException, BackgroundTasks
-from app.schemas.chat import ChatRequest, ChatResponse, TranslationRequest, TranslationResponse, HealthResponse
-from app.ai.router import AgentRouter, TRANSLATION_AGENT, EMERGENCY_AGENT
+from fastapi.responses import JSONResponse
+
+from app.schemas.chat import (
+    ChatRequest,
+    ChatResponse,
+    TranslationRequest,
+    TranslationResponse,
+    HealthResponse,
+)
+
+from app.ai.router import (
+    AgentRouter,
+    TRANSLATION_AGENT,
+    EMERGENCY_AGENT,
+)
+
 from app.ai.context import ContextManager
 from app.ai.memory import ConversationMemory
 from app.ai.rag import RAGPipeline
+
 from app.core.config import settings
 from app.services.firebase import get_db
 
+from app.utils.json_loader import load_json
+
 logger = logging.getLogger("stadiumverse.api.v1")
+
 router = APIRouter()
+
+
+# -------------------------------------------------------
+# HEALTH
+# -------------------------------------------------------
 
 @router.get("/health", response_model=HealthResponse)
 async def check_health():
-    """
-    Validates backend environment key configs and database connection.
-    """
-    firebase_status = "connected" if get_db() is not None else "disconnected"
-    gemini_status = "configured" if settings.GEMINI_API_KEY else "unconfigured"
-    
+
+    firebase_status = (
+        "connected"
+        if get_db() is not None
+        else "disconnected"
+    )
+
+    gemini_status = (
+        "configured"
+        if settings.GEMINI_API_KEY
+        else "unconfigured"
+    )
+
     return HealthResponse(
         status="healthy",
         timestamp=datetime.now(timezone.utc).isoformat(),
         services={
             "firebase": firebase_status,
-            "gemini_api": gemini_status
-        }
+            "gemini_api": gemini_status,
+        },
     )
 
+
+# -------------------------------------------------------
+# CHAT
+# -------------------------------------------------------
+
 @router.post("/ai/chat", response_model=ChatResponse)
-async def chat_interaction(request: ChatRequest, background_tasks: BackgroundTasks):
-    """
-    Core entrypoint to converse with StadiumVerse AI agents.
-    Resolves agent routing, injects session history, queries Gemini, and logs conversations.
-    """
+async def chat_interaction(
+    request: ChatRequest,
+    background_tasks: BackgroundTasks,
+):
+
     session_id = request.session_id
     user_msg = request.message
-    
-    # 1. Retrieve session history from Firestore
+
     history = ConversationMemory.get_history(session_id)
-    
-    # 2. Assemble real-time context and RAG documents
-    merged_context = await ContextManager.assemble_context(request.context)
-    
-    # Incorporate history log in execution context
+
+    merged_context = await ContextManager.assemble_context(
+        request.context
+    )
+
     merged_context["chat_history"] = history
-    
-    # Augment the prompt using the RAG pipeline
+
     augmented_msg = RAGPipeline.augment_prompt(user_msg)
-    
-    # 3. Route & execute corresponding agent
+
     try:
-        dispatch_result = await AgentRouter.dispatch(augmented_msg, merged_context)
+
+        dispatch_result = await AgentRouter.dispatch(
+            augmented_msg,
+            merged_context,
+        )
+
     except Exception as e:
-        logger.error(f"Error executing agent dispatcher: {e}")
-        raise HTTPException(status_code=500, detail="Failed to execute AI agent service.")
-        
+
+        logger.error(f"Dispatcher Error: {e}")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to execute AI agent.",
+        )
+
     response_text = dispatch_result["response"]
+
     agent_resolved = dispatch_result["agent_resolved"]
 
-    # 4. Persist interaction logs asynchronously using FastAPI BackgroundTasks
-    background_tasks.add_task(ConversationMemory.save_message, session_id, "user", user_msg)
-    background_tasks.add_task(ConversationMemory.save_message, session_id, "assistant", response_text)
+    actions = dispatch_result.get(
+        "actions_triggered",
+        [],
+    )
+
+    background_tasks.add_task(
+        ConversationMemory.save_message,
+        session_id,
+        "user",
+        user_msg,
+    )
+
+    background_tasks.add_task(
+        ConversationMemory.save_message,
+        session_id,
+        "assistant",
+        response_text,
+    )
 
     return ChatResponse(
         session_id=session_id,
         agent_resolved=agent_resolved,
         response=response_text,
-        actions_triggered=[]
+        actions_triggered=actions,
+    )
+# -------------------------------------------------------
+# TRANSLATION
+# -------------------------------------------------------
+
+@router.post(
+    "/ai/translate",
+    response_model=TranslationResponse,
+)
+async def translate_text(request: TranslationRequest):
+
+    context = {
+        "target_language": request.target_language
+    }
+
+    prompt = (
+        f"Translate the following text: "
+        f"'{request.text}' "
+        f"to {request.target_language}"
     )
 
-@router.post("/ai/translate", response_model=TranslationResponse)
-async def translate_text(request: TranslationRequest):
-    """
-    Direct endpoint routing directly to the Translation Agent.
-    """
-    context = {"target_language": request.target_language}
-    prompt = f"Translate the following text: '{request.text}' to {request.target_language}"
-    
     try:
-        translated_text = await TRANSLATION_AGENT.execute(prompt, context)
+
+        translated_text = await TRANSLATION_AGENT.execute(
+            prompt,
+            context,
+        )
+
         return TranslationResponse(
             original_text=request.text,
             translated_text=translated_text,
-            target_language=request.target_language
+            target_language=request.target_language,
         )
-    except Exception as e:
-        logger.error(f"Translation execution failed: {e}")
-        raise HTTPException(status_code=500, detail="Failed to run translation model.")
 
-@router.post("/ai/emergency", response_model=ChatResponse)
-async def emergency_alert(request: ChatRequest, background_tasks: BackgroundTasks):
-    """
-    Critical escalation pathway. Instantly routes to the emergency agent.
-    """
+    except Exception as e:
+
+        logger.error(f"Translation Error: {e}")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Translation failed.",
+        )
+
+
+# -------------------------------------------------------
+# EMERGENCY
+# -------------------------------------------------------
+
+@router.post(
+    "/ai/emergency",
+    response_model=ChatResponse,
+)
+async def emergency_alert(
+    request: ChatRequest,
+    background_tasks: BackgroundTasks,
+):
+
     try:
-        response_text = await EMERGENCY_AGENT.execute(request.message, request.context)
-        
-        # Save to database
-        background_tasks.add_task(ConversationMemory.save_message, request.session_id, "user", request.message)
-        background_tasks.add_task(ConversationMemory.save_message, request.session_id, "assistant", response_text)
-        
+
+        response_text = await EMERGENCY_AGENT.execute(
+            request.message,
+            request.context,
+        )
+
+        background_tasks.add_task(
+            ConversationMemory.save_message,
+            request.session_id,
+            "user",
+            request.message,
+        )
+
+        background_tasks.add_task(
+            ConversationMemory.save_message,
+            request.session_id,
+            "assistant",
+            response_text,
+        )
+
         return ChatResponse(
             session_id=request.session_id,
             agent_resolved="emergency",
             response=response_text,
-            actions_triggered=["DISPATCH_EMERGENCY_TEAM"]
+            actions_triggered=[
+                "DISPATCH_SECURITY",
+                "DISPATCH_MEDICAL",
+                "LOG_INCIDENT",
+            ],
         )
+
     except Exception as e:
-        logger.error(f"Emergency execution failed: {e}")
-        raise HTTPException(status_code=500, detail="Failed to run emergency routing.")
+
+        logger.error(f"Emergency Error: {e}")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Emergency service unavailable.",
+        )
+
+
+# -------------------------------------------------------
+# LIVE DASHBOARD
+# -------------------------------------------------------
+
+@router.get("/dashboard")
+async def dashboard():
+
+    system = load_json("system_status.json")
+
+    return {
+        "event": system.get("event"),
+        "weather": system.get("weather"),
+        "gates": system.get("gates"),
+        "alerts": system.get("alerts"),
+        "system": system.get("system"),
+    }
+
+
+@router.get("/parking")
+async def parking():
+
+    return load_json("parking.json")
+
+
+@router.get("/crowd")
+async def crowd():
+
+    crowd = load_json("crowd_status.json")
+
+    total_people = sum(
+        gate["current_people"]
+        for gate in crowd.values()
+    )
+
+    total_capacity = sum(
+        gate["capacity"]
+        for gate in crowd.values()
+    )
+
+    crowd_level = (
+        round(total_people / total_capacity * 100)
+        if total_capacity
+        else 0
+    )
+
+    recommended_gate = min(
+        crowd.items(),
+        key=lambda x: x[1]["density"],
+    )[0]
+
+    return {
+        "crowd_level": crowd_level,
+        "recommended_gate": recommended_gate,
+    }
+# -------------------------------------------------------
+# COMPLETE DASHBOARD STATUS
+# -------------------------------------------------------
+
+@router.get("/dashboard/status")
+async def dashboard_status():
+
+    crowd = load_json("crowd_status.json")
+    parking = load_json("parking.json")
+    system = load_json("system_status.json")
+
+    try:
+        volunteers = load_json("volunteers.json")
+    except Exception:
+        volunteers = {}
+
+    total_people = sum(
+        gate["current_people"]
+        for gate in crowd.values()
+    )
+
+    total_capacity = sum(
+        gate["capacity"]
+        for gate in crowd.values()
+    )
+
+    crowd_percentage = (
+        round((total_people / total_capacity) * 100)
+        if total_capacity > 0
+        else 0
+    )
+
+    recommended_gate = min(
+        crowd.items(),
+        key=lambda x: x[1]["density"],
+    )[0]
+
+    available_parking = sum(
+        p["available"]
+        for p in parking.values()
+    )
+
+    total_parking = sum(
+        p["capacity"]
+        for p in parking.values()
+    )
+
+    volunteer_count = len(volunteers)
+
+    return JSONResponse(
+        {
+            "stadium_health": 98,
+            "crowd_level": crowd_percentage,
+            "recommended_gate": recommended_gate,
+            "navigation_users": total_people,
+            "available_parking": available_parking,
+            "total_parking": total_parking,
+            "volunteers": volunteer_count,
+            "weather": system.get(
+                "weather",
+                "Unknown",
+            ),
+            "event": system.get(
+                "event",
+                "World Cup 2026",
+            ),
+            "alerts": system.get(
+                "alerts",
+                "None",
+            ),
+            "system_status": system.get(
+                "system",
+                "Operational",
+            ),
+            "timestamp": datetime.now(
+                timezone.utc
+            ).isoformat(),
+        }
+    )

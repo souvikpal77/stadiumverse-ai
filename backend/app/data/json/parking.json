@@ -1,14 +1,17 @@
 {
   "Parking A": {
-    "available": "142/200",
+    "available": 142,
+    "capacity": 200,
     "status": "Available"
   },
   "Parking B": {
-    "available": "22/180",
+    "available": 22,
+    "capacity": 180,
     "status": "Almost Full"
   },
   "VIP Parking": {
-    "available": "9/50",
+    "available": 9,
+    "capacity": 50,
     "status": "Limited"
   }
 }

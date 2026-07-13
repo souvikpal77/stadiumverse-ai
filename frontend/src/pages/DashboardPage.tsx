@@ -1,5 +1,6 @@
-import React from "react";
-import { useAI } from "../context/AIContext";
+import React, { useEffect, useState } from "react";
+
+import DashboardService from "../services/dashboard";
 
 import AICommandCenter from "../components/dashboard/AICommandCenter";
 import AIOperationsCenter from "../components/dashboard/AIOperationsCenter";
@@ -10,8 +11,51 @@ import CrowdAnalyticsChart from "../components/dashboard/CrowdAnalyticsChart";
 import AIInsights from "../components/dashboard/AIInsights";
 import StadiumHeatmap from "../components/dashboard/StadiumHeatmap";
 
+interface DashboardState {
+  stadium_health: number;
+  crowd_level: number;
+  recommended_gate: string;
+  navigation_users: number;
+  available_parking: number;
+  total_parking: number;
+  volunteers: number;
+  weather: string;
+  event: string;
+  alerts: string;
+  system_status: string;
+  timestamp: string;
+}
+
 export default function DashboardPage() {
-  const { state } = useAI();
+  const [dashboard, setDashboard] = useState<DashboardState | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  async function loadDashboard() {
+    try {
+      const data = await DashboardService.getDashboard();
+      setDashboard(data as unknown as DashboardState);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadDashboard();
+
+    const timer = setInterval(loadDashboard, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  if (loading || !dashboard) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white text-2xl">
+        Loading Stadium Dashboard...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -29,7 +73,11 @@ export default function DashboardPage() {
             </h1>
 
             <p className="text-slate-400 mt-2">
-              FIFA World Cup 2026 AI Command Center
+              {dashboard.event}
+            </p>
+
+            <p className="text-sm text-cyan-400 mt-1">
+              Weather: {dashboard.weather}
             </p>
 
           </div>
@@ -41,7 +89,7 @@ export default function DashboardPage() {
             </p>
 
             <h2 className="text-green-400 text-3xl font-bold">
-              {state.stadiumHealth}%
+              {dashboard.stadium_health}%
             </h2>
 
           </div>
@@ -53,10 +101,10 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto p-8 space-y-8">
 
         <AICommandCenter />
-        <AIOperationsCenter />
-        <AIScenarioSimulator />
 
-        {/* Live Cards */}
+        <AIOperationsCenter />
+
+        <AIScenarioSimulator />
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
 
@@ -67,7 +115,7 @@ export default function DashboardPage() {
             </h3>
 
             <h1 className="text-5xl font-bold text-cyan-400 mt-4">
-              {state.crowdLevel}%
+              {dashboard.crowd_level}%
             </h1>
 
           </div>
@@ -79,7 +127,7 @@ export default function DashboardPage() {
             </h3>
 
             <h1 className="text-3xl font-bold text-green-400 mt-4">
-              {state.activeGate}
+              {dashboard.recommended_gate}
             </h1>
 
           </div>
@@ -91,7 +139,7 @@ export default function DashboardPage() {
             </h3>
 
             <h1 className="text-5xl font-bold text-blue-400 mt-4">
-              {state.navigationUsers}
+              {dashboard.navigation_users}
             </h1>
 
           </div>
@@ -99,24 +147,16 @@ export default function DashboardPage() {
           <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6">
 
             <h3 className="text-slate-400">
-              🚨 Emergency
+              🚗 Parking
             </h3>
 
-            <h1
-              className={`text-3xl font-bold mt-4 ${
-                state.emergency
-                  ? "text-red-400"
-                  : "text-green-400"
-              }`}
-            >
-              {state.emergency ? "ACTIVE" : "NONE"}
+            <h1 className="text-3xl font-bold text-yellow-400 mt-4">
+              {dashboard.available_parking}/{dashboard.total_parking}
             </h1>
 
           </div>
 
         </div>
-
-        {/* AI Decision */}
 
         <div className="rounded-2xl bg-gradient-to-r from-cyan-900/30 to-blue-900/20 border border-cyan-500 p-8">
 
@@ -130,7 +170,7 @@ export default function DashboardPage() {
               👥 Crowd Level:
               <span className="text-cyan-400 font-bold">
                 {" "}
-                {state.crowdLevel}%
+                {dashboard.crowd_level}%
               </span>
             </p>
 
@@ -138,7 +178,7 @@ export default function DashboardPage() {
               🚪 Recommended Entry:
               <span className="text-green-400 font-bold">
                 {" "}
-                {state.activeGate}
+                {dashboard.recommended_gate}
               </span>
             </p>
 
@@ -146,21 +186,23 @@ export default function DashboardPage() {
               👥 Active Navigation Users:
               <span className="text-blue-400 font-bold">
                 {" "}
-                {state.navigationUsers}
+                {dashboard.navigation_users}
               </span>
             </p>
 
             <p>
-              🚨 Emergency Status:
-              <span
-                className={`font-bold ${
-                  state.emergency
-                    ? "text-red-400"
-                    : "text-green-400"
-                }`}
-              >
+              🚨 Alerts:
+              <span className="text-red-400 font-bold">
                 {" "}
-                {state.emergency ? "Emergency Detected" : "Normal"}
+                {dashboard.alerts}
+              </span>
+            </p>
+
+            <p>
+              ❤️ System:
+              <span className="text-emerald-400 font-bold">
+                {" "}
+                {dashboard.system_status}
               </span>
             </p>
 

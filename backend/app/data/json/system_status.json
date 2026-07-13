@@ -1,7 +1,8 @@
 {
-  "event": "Champions League Final",
-  "weather": "Clear, 22°C",
-  "gates": "All Gates Open",
-  "alerts": "None",
-  "system": "Operational"
+  "stadiumHealth": 98,
+  "crowdLevel": 62,
+  "activeGate": "Gate A",
+  "navigationUsers": 165,
+  "emergency": false,
+  "scenario": "Normal"
 }

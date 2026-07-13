@@ -1,0 +1,26 @@
+{
+  "Gate A": {
+    "status": "Open",
+    "crowd": "Low",
+    "walk": "2 min",
+    "nearby": ["Food Court", "Restroom"]
+  },
+  "Gate B": {
+    "status": "Open",
+    "crowd": "Medium",
+    "walk": "3 min",
+    "nearby": ["ATM", "Restroom"]
+  },
+  "Gate C": {
+    "status": "Open",
+    "crowd": "High",
+    "walk": "5 min",
+    "nearby": ["Food Court", "Medical Center"]
+  },
+  "Gate D": {
+    "status": "Open",
+    "crowd": "Low",
+    "walk": "2 min",
+    "nearby": ["VIP Lounge", "Restroom"]
+  }
+}

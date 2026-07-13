@@ -1,22 +1,57 @@
 {
   "Gate A": {
-    "crowd": "Low",
-    "wait": "2 min",
-    "density": 18
+    "status": "🟢",
+    "crowd_level": "Low",
+    "wait_time": "2 min",
+    "occupancy": "18%",
+    "recommendation": "Fastest entry gate"
   },
+
   "Gate B": {
-    "crowd": "Medium",
-    "wait": "5 min",
-    "density": 42
+    "status": "🟡",
+    "crowd_level": "Medium",
+    "wait_time": "5 min",
+    "occupancy": "42%",
+    "recommendation": "Normal waiting time"
   },
+
   "Gate C": {
-    "crowd": "High",
-    "wait": "12 min",
-    "density": 87
+    "status": "🔴",
+    "crowd_level": "High",
+    "wait_time": "12 min",
+    "occupancy": "87%",
+    "recommendation": "Avoid if possible. Use Gate A."
   },
+
   "Gate D": {
-    "crowd": "Low",
-    "wait": "1 min",
-    "density": 12
+    "status": "🟢",
+    "crowd_level": "Low",
+    "wait_time": "1 min",
+    "occupancy": "12%",
+    "recommendation": "Best alternate entrance"
+  },
+
+  "Food Court": {
+    "status": "🟡",
+    "crowd_level": "Medium",
+    "wait_time": "8 min",
+    "occupancy": "70%",
+    "recommendation": "East Food Court has shorter queues"
+  },
+
+  "Restroom North": {
+    "status": "🟢",
+    "crowd_level": "Low",
+    "wait_time": "No Queue",
+    "occupancy": "20%",
+    "recommendation": "Recommended"
+  },
+
+  "Restroom South": {
+    "status": "🔴",
+    "crowd_level": "High",
+    "wait_time": "6 min",
+    "occupancy": "83%",
+    "recommendation": "Use Restroom North"
   }
 }

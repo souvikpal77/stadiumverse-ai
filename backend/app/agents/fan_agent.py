@@ -1,10 +1,13 @@
 from app.agents.base_agent import BaseAgent
-
 from app.utils.json_loader import load_json
 
-FACILITIES = load_json("facilities.json")
-PARKING_STATUS = load_json("parking.json")
-MATCH_SCHEDULE = load_json("schedule.json")
+FOOD = load_json("food.json")
+RESTROOM = load_json("restroom.json")
+PARKING = load_json("parking.json")
+SCHEDULE = load_json("schedule.json")
+SYSTEM = load_json("system_status.json")
+MERCHANDISE = load_json("merchandise.json")
+WIFI = load_json("wifi.json")
 
 
 class FanAgent(BaseAgent):
@@ -17,61 +20,152 @@ class FanAgent(BaseAgent):
 
     async def execute(self, user_message: str, context=None):
 
-        message = user_message.lower()
+        message = user_message.lower().strip()
 
-        # ------------------------
-        # Parking
-        # ------------------------
+        # -------------------------------------------------
+        # FOOD COURT / COFFEE
+        # -------------------------------------------------
+
+        if any(word in message for word in [
+            "food",
+            "food court",
+            "restaurant",
+            "eat",
+            "burger",
+            "pizza",
+            "snack",
+            "coffee",
+            "cafe"
+        ]):
+
+            if "coffee" in message or "cafe" in message:
+                info = FOOD["Coffee Shop"]
+                title = "☕ Coffee Shop"
+            else:
+                info = FOOD["Food Court"]
+                title = "🍔 Food Court"
+
+            return (
+                f"{title}\n\n"
+                f"📍 Location : {info['location']}\n"
+                f"📏 Distance : {info['distance']}\n"
+                f"🏢 Floor : {info['floor']}"
+            )
+
+        # -------------------------------------------------
+        # RESTROOM
+        # -------------------------------------------------
+
+        if any(word in message for word in [
+            "restroom",
+            "toilet",
+            "washroom",
+            "bathroom"
+        ]):
+
+            info = RESTROOM["Restroom"]
+
+            return (
+                "🚻 Restroom\n\n"
+                f"📍 Location : {info['location']}\n"
+                f"📏 Distance : {info['distance']}\n"
+                f"🏢 Floor : {info['floor']}"
+            )
+
+        # -------------------------------------------------
+        # PARKING
+        # -------------------------------------------------
+
         if "parking" in message:
 
-            response = "🚗 **Parking Status**\n\n"
+            response = "🚗 Parking Status\n\n"
 
-            for name, info in PARKING_STATUS.items():
+            for name, info in PARKING.items():
+
                 response += (
                     f"📍 {name}\n"
-                    f"Available: {info['available']}/{info['total']}\n"
-                    f"Status: {info['status']}\n\n"
+                    f"Available : {info['available']}\n"
+                    f"Status : {info['status']}\n\n"
                 )
 
             return response
 
-        # ------------------------
-        # Match Schedule
-        # ------------------------
-        if "schedule" in message or "match" in message or "fixture" in message:
+        # -------------------------------------------------
+        # MATCH SCHEDULE
+        # -------------------------------------------------
 
-            response = "📅 **Today's Match Schedule**\n\n"
+        if any(word in message for word in [
+            "schedule",
+            "match",
+            "fixture",
+            "today"
+        ]):
 
-            for match in MATCH_SCHEDULE:
+            response = "📅 Today's Match Schedule\n\n"
+
+            for game in SCHEDULE["today"]:
+
                 response += (
-                    f"⚽ {match['match']}\n"
-                    f"🕒 Kickoff: {match['kickoff']}\n"
-                    f"🚪 Gates Open: {match['gate_open']}\n\n"
+                    f"⚽ {game['match']}\n"
+                    f"🕒 Kickoff : {game['kickoff']}\n"
+                    f"🚪 Gates Open : {game['gates_open']}\n\n"
                 )
 
             return response
 
-        # ------------------------
-        # Facilities
-        # ------------------------
-        for facility, info in FACILITIES.items():
+        # -------------------------------------------------
+        # MERCHANDISE
+        # -------------------------------------------------
 
-            if facility.lower() in message:
+        if any(word in message for word in [
+            "shop",
+            "store",
+            "merchandise",
+            "souvenir",
+            "jersey"
+        ]):
 
-                return f"""
-📍 {facility}
+            info = MERCHANDISE["Main Store"]
 
-Location:
-{info['location']}
+            return (
+                "🛍 Merchandise Store\n\n"
+                f"📍 Location : {info['location']}\n"
+                f"🕒 Timing : {info['timing']}"
+            )
 
-Distance:
-{info['distance']}
+        # -------------------------------------------------
+        # WIFI
+        # -------------------------------------------------
 
-Floor:
-{info['floor']}
-"""
+        if "wifi" in message:
 
-        # ------------------------
-        # Default to Gemini
-        # ------------------------
+            return (
+                "📶 Stadium WiFi\n\n"
+                f"SSID : {WIFI['ssid']}\n"
+                f"Password : {WIFI['password']}"
+            )
+
+        # -------------------------------------------------
+        # SYSTEM STATUS
+        # -------------------------------------------------
+
+        if any(word in message for word in [
+            "system status",
+            "stadium status",
+            "system"
+        ]):
+
+            return (
+                "🟢 Stadium Status\n\n"
+                f"🏆 Event : {SYSTEM['event']}\n"
+                f"🌤 Weather : {SYSTEM['weather']}\n"
+                f"🚪 Gates : {SYSTEM['gates']}\n"
+                f"⚠ Alerts : {SYSTEM['alerts']}\n"
+                f"💻 System : {SYSTEM['system']}"
+            )
+
+        # -------------------------------------------------
+        # FALLBACK TO GEMINI
+        # -------------------------------------------------
+
         return await super().execute(user_message, context)

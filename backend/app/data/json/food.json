@@ -1,0 +1,12 @@
+{
+  "Food Court": {
+    "location": "Level 2, Corridor 2",
+    "distance": "35 m",
+    "floor": "2"
+  },
+  "Coffee Shop": {
+    "location": "Corridor 1",
+    "distance": "20 m",
+    "floor": "1"
+  }
+}

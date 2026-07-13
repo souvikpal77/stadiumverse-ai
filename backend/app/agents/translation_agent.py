@@ -11,93 +11,132 @@ class TranslationAgent(BaseAgent):
 
     async def execute(self, user_message: str, context=None):
 
+        message = user_message.lower().strip()
+
+        # -------------------------------------------------
+        # Detect Target Language Automatically
+        # -------------------------------------------------
+
         target_language = "English"
 
-        if context:
-            target_language = context.get(
-                "target_language",
-                target_language
-            )
+        languages = [
+            "hindi",
+            "bengali",
+            "spanish",
+            "french",
+            "german",
+            "arabic",
+            "japanese",
+            "korean",
+            "chinese"
+        ]
 
-        message = user_message.lower()
+        for lang in languages:
+            if lang in message:
+                target_language = lang.title()
+                break
 
-        # ---------------------------------------
-        # Hindi
-        # ---------------------------------------
+        # -------------------------------------------------
+        # Remove "translate"
+        # -------------------------------------------------
 
-        if target_language.lower() == "hindi":
+        text = user_message
 
-            phrases = {
+        lower = message
+
+        if "translate" in lower:
+            text = text[text.lower().find("translate") + len("translate"):].strip()
+
+        if " to " in text.lower():
+
+            idx = text.lower().rfind(" to ")
+
+            text = text[:idx].strip()
+
+        # -------------------------------------------------
+        # Common Offline Translations
+        # -------------------------------------------------
+
+        OFFLINE = {
+
+            "Hindi": {
+
+                "hello": "नमस्ते",
+                "thank you": "धन्यवाद",
                 "where is my seat": "मेरी सीट कहाँ है?",
-                "where is the restroom": "शौचालय कहाँ है?",
                 "where is gate a": "गेट A कहाँ है?",
+                "where is the restroom": "शौचालय कहाँ है?",
                 "where is the food court": "फूड कोर्ट कहाँ है?",
                 "i need help": "मुझे सहायता चाहिए।",
                 "medical emergency": "चिकित्सा आपातकाल।"
-            }
 
-            for key, value in phrases.items():
-                if key in message:
-                    return (
-                        "🌍 **Translation**\n\n"
-                        f"Language : Hindi\n\n"
-                        f"{value}"
-                    )
+            },
 
-        # ---------------------------------------
-        # Bengali
-        # ---------------------------------------
+            "Bengali": {
 
-        if target_language.lower() == "bengali":
-
-            phrases = {
+                "hello": "হ্যালো",
+                "thank you": "ধন্যবাদ",
                 "where is my seat": "আমার সিট কোথায়?",
-                "where is the restroom": "টয়লেট কোথায়?",
                 "where is gate a": "গেট A কোথায়?",
+                "where is the restroom": "টয়লেট কোথায়?",
                 "where is the food court": "ফুড কোর্ট কোথায়?",
                 "i need help": "আমার সাহায্য দরকার।",
                 "medical emergency": "চিকিৎসা জরুরি অবস্থা।"
-            }
 
-            for key, value in phrases.items():
-                if key in message:
-                    return (
-                        "🌍 **Translation**\n\n"
-                        f"Language : Bengali\n\n"
-                        f"{value}"
-                    )
+            },
 
-        # ---------------------------------------
-        # Spanish
-        # ---------------------------------------
+            "Spanish": {
 
-        if target_language.lower() == "spanish":
-
-            phrases = {
+                "hello": "Hola",
+                "thank you": "Gracias",
                 "where is my seat": "¿Dónde está mi asiento?",
-                "where is the restroom": "¿Dónde está el baño?",
                 "where is gate a": "¿Dónde está la puerta A?",
+                "where is the restroom": "¿Dónde está el baño?",
                 "where is the food court": "¿Dónde está el patio de comidas?",
                 "i need help": "Necesito ayuda.",
                 "medical emergency": "Emergencia médica."
+
             }
 
-            for key, value in phrases.items():
-                if key in message:
-                    return (
-                        "🌍 **Translation**\n\n"
-                        f"Language : Spanish\n\n"
-                        f"{value}"
-                    )
+        }
 
-        # ---------------------------------------
-        # Gemini fallback
-        # ---------------------------------------
+        if (
+            target_language in OFFLINE and
+            text.lower() in OFFLINE[target_language]
+        ):
 
-        prompt = (
-            f"Translate the following text into {target_language}. "
-            "Keep stadium names like Gate A, Section A4 and Food Court unchanged.\n\n"
-            f"Text:\n{user_message}"
+            return (
+                "🌍 Translation\n\n"
+                f"Language : {target_language}\n\n"
+                f"Original : {text}\n\n"
+                f"Translation : {OFFLINE[target_language][text.lower()]}"
+            )
+
+        # -------------------------------------------------
+        # Gemini Translation
+        # -------------------------------------------------
+
+        prompt = f"""
+You are a professional translator.
+
+Translate ONLY the given sentence.
+
+Target Language: {target_language}
+
+Rules:
+- Keep Gate A, Gate B, Section A4, Food Court unchanged.
+- Return only the translation.
+- Do not explain.
+
+Sentence:
+{text}
+"""
+
+        translated = await super().execute(prompt, context)
+
+        return (
+            "🌍 Translation\n\n"
+            f"Language : {target_language}\n\n"
+            f"Original : {text}\n\n"
+            f"Translation :\n\n{translated}"
         )
-
-        return await super().execute(prompt, context)

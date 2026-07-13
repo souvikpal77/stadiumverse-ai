@@ -1,12 +1,14 @@
-[
-  {
-    "match": "🇦🇷 Argentina vs 🇧🇷 Brazil",
-    "kickoff": "18:00",
-    "gate_open": "16:00"
-  },
-  {
-    "match": "🇫🇷 France vs 🇪🇸 Spain",
-    "kickoff": "21:00",
-    "gate_open": "19:00"
-  }
-]
+{
+  "today": [
+    {
+      "match": "Argentina vs Brazil",
+      "kickoff": "18:00",
+      "gates_open": "16:00"
+    },
+    {
+      "match": "France vs Spain",
+      "kickoff": "21:00",
+      "gates_open": "19:00"
+    }
+  ]
+}

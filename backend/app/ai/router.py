@@ -11,7 +11,10 @@ from app.agents.fan_agent import FanAgent
 
 logger = logging.getLogger("stadiumverse.ai.router")
 
+# =====================================================
 # Singleton Agents
+# =====================================================
+
 CROWD_AGENT = CrowdAgent()
 NAVIGATION_AGENT = NavigationAgent()
 OPERATIONS_AGENT = OperationsAgent()
@@ -30,13 +33,23 @@ class AgentRouter:
         role = (context or {}).get("role", "").lower()
 
         # =====================================================
-        # EMERGENCY
+        # EMERGENCY (Highest Priority)
         # =====================================================
 
         emergency_keywords = [
-            "emergency", "fire", "medical", "ambulance", "doctor",
-            "injury", "injured", "fight", "security",
-            "bomb", "collapse", "evacuate", "help me"
+            "emergency",
+            "fire",
+            "medical emergency",
+            "ambulance",
+            "doctor",
+            "injured",
+            "injury",
+            "fight",
+            "security",
+            "bomb",
+            "collapse",
+            "evacuate",
+            "help me"
         ]
 
         if any(k in msg for k in emergency_keywords):
@@ -47,47 +60,23 @@ class AgentRouter:
         # =====================================================
 
         translation_keywords = [
-            "translate", "translation", "spanish", "french",
-            "german", "arabic", "english", "hindi",
-            "bengali", "japanese", "korean", "chinese"
+            "translate",
+            "translation",
+            "translate to",
+            "hindi",
+            "bengali",
+            "english",
+            "spanish",
+            "french",
+            "arabic",
+            "german",
+            "japanese",
+            "korean",
+            "chinese"
         ]
 
         if any(k in msg for k in translation_keywords):
             return "translation", TRANSLATION_AGENT
-
-        # =====================================================
-        # NAVIGATION  (CHECK BEFORE FAN)
-        # =====================================================
-
-        navigation_keywords = [
-            "where is my seat",
-            "find my seat",
-            "my seat",
-            "seat",
-            "section",
-            "row",
-            "block",
-            "gate",
-            "navigate",
-            "navigation",
-            "route",
-            "direction",
-            "directions",
-            "locate",
-            "location",
-            "take me",
-            "way",
-            "exit",
-            "entrance",
-            "stairs",
-            "lift",
-            "elevator",
-            "escalator",
-            "where is gate"
-        ]
-
-        if any(k in msg for k in navigation_keywords):
-            return "navigation", NAVIGATION_AGENT
 
         # =====================================================
         # CROWD
@@ -95,40 +84,21 @@ class AgentRouter:
 
         crowd_keywords = [
             "crowd",
-            "queue",
-            "waiting",
-            "wait time",
-            "busy",
-            "traffic",
-            "rush",
-            "capacity",
+            "crowded",
             "least crowded",
-            "less crowded",
-            "crowded"
+            "best gate",
+            "fastest gate",
+            "queue",
+            "wait",
+            "waiting",
+            "traffic",
+            "occupancy",
+            "density",
+            "busy"
         ]
 
         if any(k in msg for k in crowd_keywords):
             return "crowd", CROWD_AGENT
-
-        # =====================================================
-        # OPERATIONS
-        # =====================================================
-
-        operations_keywords = [
-            "scanner",
-            "camera",
-            "maintenance",
-            "repair",
-            "broken",
-            "cleaning",
-            "generator",
-            "electricity",
-            "hvac",
-            "water leak"
-        ]
-
-        if role == "operator" or any(k in msg for k in operations_keywords):
-            return "operations", OPERATIONS_AGENT
 
         # =====================================================
         # VOLUNTEER
@@ -136,41 +106,119 @@ class AgentRouter:
 
         volunteer_keywords = [
             "volunteer",
+            "volunteers",
+            "helper",
+            "staff",
             "task",
             "assignment",
             "shift",
-            "duty"
+            "duty",
+            "gate a volunteer",
+            "gate b volunteer",
+            "gate c volunteer",
+            "gate d volunteer",
+            "food court volunteer",
+            "medical center volunteer",
+            "vip entrance volunteer"
         ]
 
         if role == "volunteer" or any(k in msg for k in volunteer_keywords):
             return "volunteer", VOLUNTEER_AGENT
 
         # =====================================================
-        # FAN
+        # OPERATIONS
+        # =====================================================
+
+        operations_keywords = [
+            "camera",
+            "scanner",
+            "maintenance",
+            "repair",
+            "broken",
+            "generator",
+            "electricity",
+            "power",
+            "water leak",
+            "hvac",
+            "cleaning"
+        ]
+
+        if role == "operator" or any(k in msg for k in operations_keywords):
+            return "operations", OPERATIONS_AGENT
+
+        # =====================================================
+        # NAVIGATION
+        # =====================================================
+
+        navigation_keywords = [
+
+            # Seats
+            "seat",
+            "my seat",
+            "find my seat",
+            "section",
+            "row",
+            "block",
+
+            # Gates
+            "gate",
+            "gate a",
+            "gate b",
+            "gate c",
+            "gate d",
+
+            # Locations
+            "food court",
+            "restroom",
+            "washroom",
+            "toilet",
+            "bathroom",
+            "medical center",
+            "atm",
+
+            # Directions
+            "navigate",
+            "navigation",
+            "route",
+            "direction",
+            "directions",
+            "where is",
+            "take me",
+            "locate",
+            "location",
+
+            # Accessibility
+            "exit",
+            "lift",
+            "elevator",
+            "wheelchair",
+            "accessible"
+        ]
+
+        if any(k in msg for k in navigation_keywords):
+            return "navigation", NAVIGATION_AGENT
+
+        # =====================================================
+        # FAN ASSISTANT
         # =====================================================
 
         fan_keywords = [
-            "food",
-            "food court",
-            "restaurant",
-            "eat",
-            "meal",
-            "burger",
-            "pizza",
-            "snack",
-            "coffee",
-            "tea",
-            "cafe",
             "parking",
-            "shop",
-            "souvenir",
-            "jersey",
-            "wifi",
-            "ticket",
             "schedule",
             "fixture",
-            "kickoff",
             "match",
+            "today",
+            "wifi",
+            "internet",
+            "merchandise",
+            "shop",
+            "store",
+            "souvenir",
+            "jersey",
+            "ticket",
+            "system",
+            "system status",
+            "stadium status",
             "hello",
             "hi",
             "hey",
@@ -188,7 +236,7 @@ class AgentRouter:
         return "fan", FAN_AGENT
 
     @classmethod
-    async def dispatch(cls, message: str, context: dict = None) -> dict:
+    async def dispatch(cls, message: str, context: dict = None):
 
         agent_name, agent = cls.route_query(message, context)
 

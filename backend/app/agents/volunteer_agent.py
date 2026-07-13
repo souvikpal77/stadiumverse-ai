@@ -14,48 +14,51 @@ class VolunteerAgent(BaseAgent):
 
     async def execute(self, user_message: str, context=None):
 
-        message = user_message.lower()
+        message = user_message.lower().strip()
 
-        # ------------------------------------------
-        # Show all volunteers
-        # ------------------------------------------
-
-        if any(word in message for word in [
-            "volunteer",
-            "volunteers",
-            "staff",
-            "helper"
-        ]):
-
-            response = "🦺 **Volunteer Assignments**\n\n"
-
-            for location, info in VOLUNTEERS.items():
-
-                response += (
-                    f"📍 **{location}**\n"
-                    f"Volunteer : {info['volunteer']}\n"
-                    f"Task : {info['task']}\n\n"
-                )
-
-            return response
-
-        # ------------------------------------------
-        # Individual location
-        # ------------------------------------------
+        # =====================================================
+        # Individual Location (FIRST)
+        # =====================================================
 
         for location, info in VOLUNTEERS.items():
 
             if location.lower() in message:
 
                 return (
-                    f"🦺 **Volunteer Information**\n\n"
-                    f"📍 Location : {location}\n"
-                    f"Volunteer : {info['volunteer']}\n"
-                    f"Task : {info['task']}"
+                    "🙋 Volunteer\n\n"
+                    "🦺 Volunteer Information\n\n"
+                    f"📍 Location : {location}\n\n"
+                    f"👤 Volunteer : {info['volunteer']}\n"
+                    f"🛠 Task : {info['task']}"
                 )
 
-        # ------------------------------------------
-        # Gemini fallback
-        # ------------------------------------------
+        # =====================================================
+        # Show All Volunteers
+        # =====================================================
+
+        if any(word in message for word in [
+            "volunteer",
+            "volunteers",
+            "staff",
+            "helper",
+            "assignment"
+        ]):
+
+            response = "🙋 Volunteer\n\n"
+            response += "🦺 Volunteer Assignments\n\n"
+
+            for location, info in VOLUNTEERS.items():
+
+                response += (
+                    f"📍 {location}\n"
+                    f"👤 Volunteer : {info['volunteer']}\n"
+                    f"🛠 Task : {info['task']}\n\n"
+                )
+
+            return response
+
+        # =====================================================
+        # Gemini Fallback
+        # =====================================================
 
         return await super().execute(user_message, context)

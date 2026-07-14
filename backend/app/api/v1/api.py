@@ -339,3 +339,14 @@ async def dashboard_status():
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
     )
+
+    # -------------------------------------------------------
+# SYSTEM STATUS
+# -------------------------------------------------------
+
+@router.get("/system")
+async def system_status():
+
+    system = load_json("system_status.json")
+
+    return JSONResponse(system)

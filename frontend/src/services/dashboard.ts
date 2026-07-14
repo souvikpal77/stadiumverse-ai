@@ -16,6 +16,18 @@ export interface DashboardData {
   timestamp: string;
 }
 
+export interface SystemData {
+  stadiumHealth: number;
+  crowdLevel: number;
+  activeGate: string;
+  navigationUsers: number;
+  emergency: boolean;
+  scenario: string;
+  event: string;
+  weather: string;
+  alerts: string[];
+}
+
 export interface CrowdData {
   [key: string]: {
     status: string;
@@ -48,6 +60,10 @@ export const DashboardService = {
   getParkingStatus() {
     return fetchJSON(`${API}/parking`);
   },
+
+  getSystemStatus() {
+  return fetchJSON<SystemData>(`${API}/system`);
+},
 };
 
 export default DashboardService;

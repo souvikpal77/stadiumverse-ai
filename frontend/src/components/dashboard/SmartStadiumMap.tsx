@@ -26,7 +26,7 @@ export default function SmartStadiumMap() {
 
 async function loadSystem() {
   try {
-    const data = await DashboardService.getDashboardStatus();
+    const data = await DashboardService.getSystemStatus();
     setSystem(data);
   } catch (err) {
     console.error(err);
@@ -135,80 +135,154 @@ async function loadSystem() {
 
 </div>
 
-        <div className="rounded-xl bg-orange-500/20 border border-orange-500 p-6 text-center">
-          <div className="text-4xl">🍔</div>
-          <p className="mt-2">Food Court</p>
-        </div>
+        <div className="rounded-xl bg-orange-500/20 border border-orange-500 p-6">
 
-        <div className="rounded-xl bg-cyan-500/20 border border-cyan-500 p-6 text-center">
-          <div className="text-4xl">🚻</div>
-          <p className="mt-2">Restrooms</p>
-        </div>
+  <div className="text-4xl text-center">📢</div>
 
-      </div>
+  <h3 className="font-bold text-center mt-2">
+    Stadium Status
+  </h3>
 
-      {/* Live Stadium Status */}
+  <div className="mt-4 space-y-2 text-sm">
 
-      <div className="mt-8 rounded-xl bg-slate-800 border border-cyan-500 p-6">
-
-        <h3 className="text-xl font-bold text-cyan-400 mb-4">
-          🖥 Live Stadium Status
-        </h3>
-
-        <div className="grid md:grid-cols-2 gap-4">
-
-          <p>
-            ❤️ Health:
-            <span className="text-green-400 font-bold">
-              {" "}
-              {system.stadium_health ?? "--"}%
-            </span>
-          </p>
-
-          <p>
-            👥 Crowd:
-            <span className="text-cyan-400 font-bold">
-              {" "}
-              {system.crowd_level ?? "--"}%
-            </span>
-          </p>
-
-          <p>
-            🚪 Recommended Gate:
-            <span className="text-green-400 font-bold">
-              {" "}
-              {system.recommended_gate ?? "--"}
-            </span>
-          </p>
-
-          <p>
-            🚗 Parking:
-            <span className="text-yellow-400 font-bold">
-              {" "}
-              {system.available_parking ?? "--"} / {system.total_parking ?? "--"}
-            </span>
-          </p>
-
-          <p>
-            🌤 Weather:
-            <span className="text-blue-400 font-bold">
-              {" "}
-              {system.weather ?? "--"}
-            </span>
-          </p>
-
-          <p>
-            ⚽ Event:
-            <span className="text-purple-400 font-bold">
-              {" "}
-              {system.event ?? "--"}
-            </span>
-          </p>
-
-        </div>
-
-      </div>
-
+    <div className="flex justify-between">
+      <span>Event</span>
+      <span className="text-cyan-400">
+        {system.event}
+      </span>
     </div>
-  );
+
+    <div className="flex justify-between">
+      <span>Weather</span>
+      <span className="text-green-400">
+        {system.weather}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Crowd</span>
+      <span className="text-yellow-400">
+        {system.crowdLevel}%
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Recommended Gate</span>
+      <span className="text-cyan-400">
+        {system.activeGate}
+      </span>
+    </div>
+
+  </div>
+
+</div>
+        <div className="rounded-xl bg-cyan-500/20 border border-cyan-500 p-6">
+
+  <div className="text-4xl text-center">🧠</div>
+
+  <h3 className="font-bold text-center mt-2">
+    AI Status
+  </h3>
+
+  <div className="mt-4 space-y-2 text-sm">
+
+    <div className="flex justify-between">
+      <span>Health</span>
+      <span className="text-green-400">
+        {system.stadiumHealth}%
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Navigation</span>
+      <span className="text-blue-400">
+        {system.navigationUsers}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Emergency</span>
+      <span className={system.emergency ? "text-red-400" : "text-green-400"}>
+        {system.emergency ? "YES" : "NO"}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Scenario</span>
+      <span className="text-cyan-400">
+        {system.scenario}
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
+{/* Stadium Live Status */}
+
+</div>
+
+<div className="mt-8 rounded-xl bg-slate-800 border border-cyan-500 p-6">
+
+  <h3 className="text-2xl font-bold text-cyan-400 mb-4">
+    🖥 Stadium Live Status
+  </h3>
+
+  <div className="grid md:grid-cols-2 gap-4">
+
+    <p>
+      🏟 Stadium Health:
+      <span className="text-green-400 font-bold">
+        {" "}
+        {system.stadiumHealth}%
+      </span>
+    </p>
+
+    <p>
+      🌤 Weather:
+      <span className="text-cyan-400 font-bold">
+        {" "}
+        {system.weather}
+      </span>
+    </p>
+
+    <p>
+      👥 Crowd Level:
+      <span className="text-yellow-400 font-bold">
+        {" "}
+        {system.crowdLevel}%
+      </span>
+    </p>
+
+    <p>
+      🚪 Active Gate:
+      <span className="text-green-400 font-bold">
+        {" "}
+        {system.activeGate}
+      </span>
+    </p>
+
+    <p>
+      🧭 Navigation Users:
+      <span className="text-blue-400 font-bold">
+        {" "}
+        {system.navigationUsers}
+      </span>
+    </p>
+
+    <p>
+      ⚙ Scenario:
+      <span className="text-purple-400 font-bold">
+        {" "}
+        {system.scenario}
+      </span>
+    </p>
+
+  </div>
+
+</div>
+
+</div>
+
+);
 }

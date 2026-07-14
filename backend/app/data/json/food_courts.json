@@ -1,0 +1,17 @@
+{
+  "Food Court A": {
+    "queue": 6,
+    "status": "Fast",
+    "emoji": "🟢"
+  },
+  "Food Court B": {
+    "queue": 14,
+    "status": "Busy",
+    "emoji": "🟡"
+  },
+  "Food Court C": {
+    "queue": 26,
+    "status": "Crowded",
+    "emoji": "🔴"
+  }
+}

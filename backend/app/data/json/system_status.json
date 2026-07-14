@@ -4,5 +4,8 @@
   "activeGate": "Gate A",
   "navigationUsers": 165,
   "emergency": false,
-  "scenario": "Normal"
+  "scenario": "Operational",
+  "event": "FIFA World Cup 2026",
+  "weather": "27°C • Cloudy",
+  "alerts": []
 }

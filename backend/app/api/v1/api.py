@@ -256,30 +256,27 @@ async def crowd():
 
     crowd = load_json("crowd_status.json")
 
-    total_people = sum(
-        gate["current_people"]
-        for gate in crowd.values()
-    )
+    gate_data = {
+        k: v for k, v in crowd.items()
+        if k.startswith("Gate")
+    }
 
-    total_capacity = sum(
-        gate["capacity"]
-        for gate in crowd.values()
-    )
+    occupancies = [
+        int(v["occupancy"].replace("%", ""))
+        for v in gate_data.values()
+    ]
 
-    crowd_level = (
-        round(total_people / total_capacity * 100)
-        if total_capacity
-        else 0
-    )
+    crowd_level = round(sum(occupancies) / len(occupancies))
 
     recommended_gate = min(
-        crowd.items(),
-        key=lambda x: x[1]["density"],
+        gate_data.items(),
+        key=lambda x: int(x[1]["occupancy"].replace("%", ""))
     )[0]
 
     return {
         "crowd_level": crowd_level,
         "recommended_gate": recommended_gate,
+        "gates": gate_data
     }
 # -------------------------------------------------------
 # COMPLETE DASHBOARD STATUS
@@ -297,25 +294,21 @@ async def dashboard_status():
     except Exception:
         volunteers = {}
 
-    total_people = sum(
-        gate["current_people"]
-        for gate in crowd.values()
-    )
+    gate_data = {
+        k: v for k, v in crowd.items()
+        if k.startswith("Gate")
+    }
 
-    total_capacity = sum(
-        gate["capacity"]
-        for gate in crowd.values()
-    )
+    occupancies = [
+        int(v["occupancy"].replace("%", ""))
+        for v in gate_data.values()
+    ]
 
-    crowd_percentage = (
-        round((total_people / total_capacity) * 100)
-        if total_capacity > 0
-        else 0
-    )
+    crowd_percentage = round(sum(occupancies) / len(occupancies))
 
     recommended_gate = min(
-        crowd.items(),
-        key=lambda x: x[1]["density"],
+        gate_data.items(),
+        key=lambda x: int(x[1]["occupancy"].replace("%", ""))
     )[0]
 
     available_parking = sum(
@@ -332,31 +325,17 @@ async def dashboard_status():
 
     return JSONResponse(
         {
-            "stadium_health": 98,
+            "stadium_health": system.get("stadiumHealth", 98),
             "crowd_level": crowd_percentage,
             "recommended_gate": recommended_gate,
-            "navigation_users": total_people,
+            "navigation_users": system.get("navigationUsers", 0),
             "available_parking": available_parking,
             "total_parking": total_parking,
             "volunteers": volunteer_count,
-            "weather": system.get(
-                "weather",
-                "Unknown",
-            ),
-            "event": system.get(
-                "event",
-                "World Cup 2026",
-            ),
-            "alerts": system.get(
-                "alerts",
-                "None",
-            ),
-            "system_status": system.get(
-                "system",
-                "Operational",
-            ),
-            "timestamp": datetime.now(
-                timezone.utc
-            ).isoformat(),
+            "weather": system.get("weather", "Unknown"),
+            "event": system.get("event", "World Cup 2026"),
+            "alerts": system.get("alerts", []),
+            "system_status": system.get("scenario", "Operational"),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
     )

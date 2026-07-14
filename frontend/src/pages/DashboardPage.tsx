@@ -12,6 +12,7 @@ import AIInsights from "../components/dashboard/AIInsights";
 import StadiumHeatmap from "../components/dashboard/StadiumHeatmap";
 import SmartStadiumMap from "../components/dashboard/SmartStadiumMap";
 
+
 interface DashboardState {
   stadium_health: number;
   crowd_level: number;
@@ -30,11 +31,16 @@ interface DashboardState {
 export default function DashboardPage() {
   const [dashboard, setDashboard] = useState<DashboardState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [emergency, setEmergency] = useState<any>(null);
 
   async function loadDashboard() {
     try {
       const data = await DashboardService.getDashboardStatus();
       setDashboard(data as unknown as DashboardState);
+
+      const emergencyData = await DashboardService.getEmergencyStatus();
+      setEmergency(emergencyData);
+
     } catch (err) {
       console.error(err);
     } finally {
@@ -112,6 +118,36 @@ export default function DashboardPage() {
 
       <div className="max-w-7xl mx-auto p-8 space-y-8">
 
+        {emergency?.active && (
+
+          <div className="rounded-2xl bg-red-600 animate-pulse p-6 border-2 border-red-300">
+
+            <h2 className="text-3xl font-bold">
+              🚨 EMERGENCY ALERT
+            </h2>
+
+      <p className="mt-3 text-lg">
+        {emergency.type}
+      </p>
+
+      <p>
+        📍 Location:
+        <strong> {emergency.location}</strong>
+      </p>
+
+      <p>
+        {emergency.message}
+      </p>
+
+      <p className="mt-3 text-yellow-200">
+        Recommended Gate:
+        <strong> {emergency.recommended_gate}</strong>
+      </p>
+
+    </div>
+
+  )}
+
         <AICommandCenter />
 
         <AIOperationsCenter />
@@ -134,6 +170,31 @@ export default function DashboardPage() {
     </div>
 
     <div className="text-right">
+      <button
+  className="mt-6 rounded-xl bg-red-600 hover:bg-red-700 px-6 py-3 font-bold transition"
+  onClick={async () => {
+  try {
+
+    await DashboardService.triggerEmergency({
+      active: true,
+      type: "Fire Emergency",
+      location: "Gate C",
+      message: "Fire detected near Gate C. Visitors are being rerouted.",
+      recommended_gate: "Gate D",
+    });
+
+    const emergencyData =
+      await DashboardService.getEmergencyStatus();
+
+    setEmergency(emergencyData);
+
+  } catch (err) {
+    console.error(err);
+  }
+}}
+>
+  🚨 Simulate Emergency
+</button>
       <p className="text-sm text-slate-400">
         AI Status
       </p>

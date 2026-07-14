@@ -64,6 +64,34 @@ export const DashboardService = {
   getSystemStatus() {
   return fetchJSON<SystemData>(`${API}/system`);
 },
+
+  getPredictions() {
+  return fetchJSON(`${API}/predictions`);
+},
+
+  getRoutes() {
+  return fetchJSON(`${API}/routes`);
+},
+
+ getEmergencyStatus() {
+  return fetchJSON(`${API}/emergency/status`);
+},
+
+async triggerEmergency(payload: any) {
+  const response = await fetch(`${API}/emergency/trigger`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to trigger emergency");
+  }
+
+  return response.json();
+},
 };
 
 export default DashboardService;

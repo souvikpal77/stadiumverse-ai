@@ -11,9 +11,19 @@ export interface DashboardData {
   volunteers: number;
   weather: string;
   event: string;
-  alerts: string;
+  alerts: string[];
   system_status: string;
   timestamp: string;
+}
+
+export interface CrowdData {
+  [key: string]: {
+    status: string;
+    crowd_level: string;
+    wait_time: string;
+    occupancy: string;
+    recommendation: string;
+  };
 }
 
 async function fetchJSON<T>(url: string): Promise<T> {
@@ -29,6 +39,14 @@ async function fetchJSON<T>(url: string): Promise<T> {
 export const DashboardService = {
   getDashboardStatus() {
     return fetchJSON<DashboardData>(`${API}/dashboard/status`);
+  },
+
+  getCrowdStatus() {
+    return fetchJSON<CrowdData>(`${API}/crowd`);
+  },
+
+  getParkingStatus() {
+    return fetchJSON(`${API}/parking`);
   },
 };
 

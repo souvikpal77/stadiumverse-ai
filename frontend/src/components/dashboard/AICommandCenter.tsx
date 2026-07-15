@@ -1,7 +1,30 @@
+import { useEffect, useState } from "react";
+import DashboardService from "../../services/dashboard";
 import { useAI } from "../../context/AIContext";
 
 export default function AICommandCenter() {
   const { state } = useAI();
+
+const [emergency, setEmergency] = useState<any>({
+  active: false,
+});
+
+async function loadEmergency() {
+  try {
+    const data = await DashboardService.getEmergencyStatus();
+    setEmergency(data);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+useEffect(() => {
+  loadEmergency();
+
+  const timer = setInterval(loadEmergency, 3000);
+
+  return () => clearInterval(timer);
+}, []);
 
   return (
     <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-lg shadow-cyan-500/10">
@@ -55,16 +78,16 @@ export default function AICommandCenter() {
         <p className="text-slate-400 mb-2">🚨 Emergency Status</p>
 
         <h3
-          className={`text-2xl font-bold ${
-            state.emergency
-              ? "text-red-400"
-              : "text-green-400"
-          }`}
-        >
-          {state.emergency
-            ? "Emergency Detected"
-            : "Normal"}
-        </h3>
+  className={`text-2xl font-bold ${
+    emergency.active
+      ? "text-red-400"
+      : "text-green-400"
+  }`}
+>
+  {emergency.active
+    ? "🚨 Emergency Detected"
+    : "✅ Normal"}
+</h3>
       </div>
 
     </div>

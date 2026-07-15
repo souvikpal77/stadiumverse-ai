@@ -1,15 +1,5 @@
 import { useState } from "react";
-
-const replies: Record<string, string> = {
-  "where is gate a": "Gate A is located near the North Entrance.",
-  "where is gate b": "Gate B is located near Parking Zone A.",
-  "where is gate c": "Gate C currently has heavy crowd. AI recommends Gate D instead.",
-  "where is gate d": "Gate D is the fastest entry with the lowest waiting time.",
-  "parking": "Parking Zone A has the highest number of available spaces.",
-  "food": "The nearest food court is beside Gate B.",
-  "washroom": "The nearest washroom is 50 meters from your current location.",
-  "help": "You can ask about gates, parking, food courts, washrooms or emergencies."
-};
+import DashboardService from "../../services/dashboard";
 
 export default function AIVoiceAssistant() {
   const [question, setQuestion] = useState("");
@@ -17,49 +7,102 @@ export default function AIVoiceAssistant() {
     "Hello! I'm StadiumVerse AI. Ask me anything about the stadium."
   );
 
-  function askAI() {
+  async function askAI() {
     const q = question.toLowerCase().trim();
 
-    let response =
-      replies[q] ||
-      "I couldn't understand that. Try asking about gates, parking, food or emergencies.";
+    try {
+      const system: any = await DashboardService.getSystemStatus();
+      const emergency: any = await DashboardService.getEmergencyStatus();
 
-    setAnswer(response);
-    const speech = new SpeechSynthesisUtterance(response);
+      let response = "";
 
-speech.rate = 1;
+      if (
+        q.includes("emergency") ||
+        q.includes("fire") ||
+        q.includes("accident")
+      ) {
+        if (emergency.active) {
+          response = `${emergency.type} detected at ${emergency.location}. ${emergency.message} Please use ${emergency.recommended_gate}.`;
+        } else {
+          response = "There is currently no emergency inside the stadium.";
+        }
+      }
 
-speech.pitch = 1;
+      else if (
+        q.includes("gate") ||
+        q.includes("which gate") ||
+        q.includes("recommended gate")
+      ) {
+        response = `AI recommends using ${system.activeGate}. It currently has the shortest waiting time.`;
+      }
 
-speech.volume = 1;
+      else if (q.includes("crowd")) {
+        response = `Current stadium crowd level is ${system.crowdLevel} percent.`;
+      }
 
-window.speechSynthesis.cancel();
+      else if (q.includes("weather")) {
+        response = `Current weather is ${system.weather}.`;
+      }
 
-window.speechSynthesis.speak(speech);
+      else if (q.includes("event")) {
+        response = `Today's event is ${system.event}.`;
+      }
+
+      else if (
+        q.includes("navigation") ||
+        q.includes("visitor")
+      ) {
+        response = `${system.navigationUsers} visitors are currently using AI Navigation.`;
+      }
+
+      else if (
+        q.includes("health") ||
+        q.includes("stadium health")
+      ) {
+        response = `Current stadium health score is ${system.stadiumHealth} percent.`;
+      }
+
+      else {
+        response =
+          "I can answer questions about gates, emergencies, weather, crowd, event, navigation and stadium status.";
+      }
+
+      setAnswer(response);
+
+      const speech = new SpeechSynthesisUtterance(response);
+      speech.rate = 1;
+      speech.pitch = 1;
+      speech.volume = 1;
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(speech);
+
+    } catch (err) {
+      console.error(err);
+      setAnswer("Unable to connect to Stadium AI server.");
+    }
   }
 
   function startListening() {
-  const SpeechRecognition =
-    (window as any).SpeechRecognition ||
-    (window as any).webkitSpeechRecognition;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
 
-  if (!SpeechRecognition) {
-    alert("Speech Recognition is not supported in this browser.");
-    return;
+    if (!SpeechRecognition) {
+      alert("Speech Recognition is not supported.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.start();
+
+    recognition.onresult = (event: any) => {
+      const text = event.results[0][0].transcript;
+      setQuestion(text);
+    };
   }
-
-  const recognition = new SpeechRecognition();
-
-  recognition.lang = "en-US";
-
-  recognition.start();
-
-  recognition.onresult = (event: any) => {
-    const text = event.results[0][0].transcript;
-
-    setQuestion(text);
-  };
-}
 
   return (
     <div className="rounded-2xl border border-cyan-500 bg-slate-900 p-6">

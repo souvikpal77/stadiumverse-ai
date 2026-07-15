@@ -40,6 +40,10 @@ export default function SmartStadiumMap() {
   const [selectedGate, setSelectedGate] =
     useState<(GateInfo & { name: string }) | null>(null);
 
+  const [emergency, setEmergency] = useState<any>({
+  active: false,
+});
+
   async function loadCrowd() {
     try {
       const data = await DashboardService.getCrowdStatus();
@@ -78,17 +82,28 @@ export default function SmartStadiumMap() {
     }
   }
 
+  async function loadEmergency() {
+  try {
+    const data = await DashboardService.getEmergencyStatus();
+    setEmergency(data);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
   useEffect(() => {
 
     loadCrowd();
     loadParking();
     loadSystem();
+    loadEmergency();
 
     const timer = setInterval(() => {
 
       loadCrowd();
       loadParking();
       loadSystem();
+      loadEmergency();
 
     }, 5000);
 
@@ -102,6 +117,32 @@ export default function SmartStadiumMap() {
       🗺 Smart Stadium Map
     </h2>
 
+  {emergency.active && (
+
+  <div className="mb-6 rounded-xl bg-red-900 border border-red-500 p-5">
+
+    <h3 className="text-2xl font-bold text-red-300">
+      🚨 {emergency.type}
+    </h3>
+
+    <p className="mt-2">
+      📍 {emergency.location}
+    </p>
+
+    <p className="mt-2">
+      {emergency.message}
+    </p>
+
+    <p className="mt-3 text-yellow-300 font-bold">
+      👉 AI recommends using
+      {" "}
+      {emergency.recommended_gate}
+    </p>
+
+  </div>
+
+)}
+
     {/* Gates */}
 
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -114,6 +155,14 @@ export default function SmartStadiumMap() {
 
         let bgClass =
           "bg-green-500/20 border border-green-500 text-green-400";
+
+        if (
+  emergency.active &&
+  emergency.recommended_gate === gate
+) {
+  bgClass =
+    "bg-cyan-500/30 border-4 border-cyan-400 text-cyan-300 animate-pulse";
+}
 
         if (item.status === "🟡") {
           bgClass =

@@ -1,0 +1,45 @@
+{
+  "Gate A": {
+    "path": [
+      "🏟 Entrance",
+      "🛂 Security Check",
+      "🚪 Gate A",
+      "💺 Seat A-24"
+    ],
+    "walking_time": "2 min",
+    "distance": "180 m"
+  },
+
+  "Gate B": {
+    "path": [
+      "🏟 Entrance",
+      "🛂 Security Check",
+      "🚪 Gate B",
+      "💺 Seat B-18"
+    ],
+    "walking_time": "4 min",
+    "distance": "320 m"
+  },
+
+  "Gate C": {
+    "path": [
+      "🏟 Entrance",
+      "🛂 Security Check",
+      "🚪 Gate C",
+      "💺 Seat C-30"
+    ],
+    "walking_time": "7 min",
+    "distance": "510 m"
+  },
+
+  "Gate D": {
+    "path": [
+      "🏟 Entrance",
+      "🛂 Security Check",
+      "🚪 Gate D",
+      "💺 Seat D-15"
+    ],
+    "walking_time": "3 min",
+    "distance": "240 m"
+  }
+}

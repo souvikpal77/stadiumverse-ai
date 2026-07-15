@@ -1,0 +1,30 @@
+{
+  "Gate A": {
+    "prediction": "Stable",
+    "future_wait": "3 min",
+    "confidence": 96,
+    "risk": "LOW",
+    "recommendation": "Normal flow"
+  },
+  "Gate B": {
+    "prediction": "Increasing Crowd",
+    "future_wait": "8 min",
+    "confidence": 91,
+    "risk": "MEDIUM",
+    "recommendation": "Monitor crowd movement"
+  },
+  "Gate C": {
+    "prediction": "Heavy Crowd Expected",
+    "future_wait": "15 min",
+    "confidence": 94,
+    "risk": "HIGH",
+    "recommendation": "Redirect visitors to Gate D"
+  },
+  "Gate D": {
+    "prediction": "Best Route",
+    "future_wait": "2 min",
+    "confidence": 98,
+    "risk": "LOW",
+    "recommendation": "Recommended entry gate"
+  }
+}

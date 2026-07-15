@@ -1,4 +1,5 @@
 import { useAI, Scenario } from "../../context/AIContext";
+import DashboardService from "../../services/dashboard";
 
 const scenarios: {
   icon: string;
@@ -74,7 +75,35 @@ export default function AIScenarioSimulator() {
 
           <button
             key={scenario.title}
-            onClick={() => setScenario(scenario.title)}
+            onClick={async () => {
+
+  setScenario(scenario.title);
+
+  if (scenario.title === "Fire Alarm") {
+
+  await DashboardService.triggerEmergency({
+    active: true,
+    type: "Fire Emergency",
+    location: "Gate C",
+    message: "Fire detected near Gate C. Visitors are being rerouted.",
+    recommended_gate: "Gate D",
+  });
+
+}
+
+if (scenario.title === "Normal") {
+
+  await DashboardService.triggerEmergency({
+    active: false,
+    type: "",
+    location: "",
+    message: "",
+    recommended_gate: "",
+  });
+
+}
+
+}}
             className={`rounded-xl border p-4 transition-all duration-300 ${
               state.scenario === scenario.title
                 ? "border-violet-500 bg-violet-500/20 scale-105"

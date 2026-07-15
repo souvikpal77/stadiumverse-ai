@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "type": "warning",
+    "title": "Crowd Alert",
+    "message": "Gate C crowd reached 89%",
+    "time": "2 sec ago"
+  },
+  {
+    "id": 2,
+    "type": "success",
+    "title": "AI Navigation",
+    "message": "Visitors redirected to Gate A",
+    "time": "10 sec ago"
+  },
+  {
+    "id": 3,
+    "type": "info",
+    "title": "Parking",
+    "message": "Parking B almost full",
+    "time": "30 sec ago"
+  },
+  {
+    "id": 4,
+    "type": "danger",
+    "title": "Medical",
+    "message": "Medical assistance requested near Section D",
+    "time": "1 min ago"
+  }
+]

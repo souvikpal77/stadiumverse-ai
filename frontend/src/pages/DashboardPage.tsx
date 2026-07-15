@@ -11,7 +11,12 @@ import CrowdAnalyticsChart from "../components/dashboard/CrowdAnalyticsChart";
 import AIInsights from "../components/dashboard/AIInsights";
 import StadiumHeatmap from "../components/dashboard/StadiumHeatmap";
 import SmartStadiumMap from "../components/dashboard/SmartStadiumMap";
-
+import AIPredictions from "../components/dashboard/AIPredictions";
+import EmergencySimulation from "../components/dashboard/EmergencySimulation";
+import AIVoiceAssistant from "../components/dashboard/AIVoiceAssistant";
+import AIReportGenerator from "../components/dashboard/AIReportGenerator";
+import AIExecutiveDashboard from "../components/dashboard/AIExecutiveDashboard";
+import AIIncidentAnalytics from "../components/dashboard/AIIncidentAnalytics";
 
 interface DashboardState {
   stadium_health: number;
@@ -151,6 +156,12 @@ export default function DashboardPage() {
         <AICommandCenter />
 
         <AIOperationsCenter />
+
+        <AIReportGenerator />
+
+        <AIExecutiveDashboard />
+
+        <AIIncidentAnalytics />
 
         <AIScenarioSimulator />
 
@@ -444,6 +455,12 @@ export default function DashboardPage() {
 </div>
 
         <AIInsights />
+
+        <AIPredictions />
+
+        <EmergencySimulation />
+
+        <AIVoiceAssistant />
 
         <SmartStadiumMap />
 

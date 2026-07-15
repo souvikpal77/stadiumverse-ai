@@ -25,7 +25,7 @@ from app.ai.rag import RAGPipeline
 from app.core.config import settings
 from app.services.firebase import get_db
 
-from app.utils.json_loader import load_json
+from app.utils.json_loader import load_json, JSON_DIR
 
 logger = logging.getLogger("stadiumverse.api.v1")
 
@@ -340,7 +340,7 @@ async def dashboard_status():
         }
     )
 
-    # -------------------------------------------------------
+# -------------------------------------------------------
 # SYSTEM STATUS
 # -------------------------------------------------------
 
@@ -350,3 +350,43 @@ async def system_status():
     system = load_json("system_status.json")
 
     return JSONResponse(system)
+
+@router.get("/predictions")
+async def predictions():
+    return load_json("predictions.json")
+
+@router.get("/routes")
+async def routes():
+    return load_json("routes.json")
+
+@router.get("/emergency/status")
+async def emergency_status():
+    return load_json("emergency.json")
+
+
+from fastapi import Body
+import json
+from app.utils.json_loader import JSON_DIR
+
+
+@router.post("/emergency/trigger")
+async def trigger_emergency(data: dict = Body(...)):
+
+    file_path = JSON_DIR / "emergency.json"
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        emergency = json.load(f)
+
+    emergency["active"] = data.get("active", False)
+    emergency["type"] = data.get("type", "None")
+    emergency["location"] = data.get("location", "")
+    emergency["message"] = data.get("message", "")
+    emergency["recommended_gate"] = data.get("recommended_gate", "Gate D")
+
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(emergency, f, indent=2)
+
+    return {
+        "success": True,
+        "message": "Emergency Updated"
+    }

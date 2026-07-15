@@ -92,6 +92,26 @@ async triggerEmergency(payload: any) {
 
   return response.json();
 },
+
+ async chatAI(message: string) {
+  const response = await fetch(`${API}/ai/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      session_id: "stadium-demo",
+      message: message,
+      context: {},
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("AI Chat failed");
+  }
+
+  return response.json();
+},
 };
 
 export default DashboardService;

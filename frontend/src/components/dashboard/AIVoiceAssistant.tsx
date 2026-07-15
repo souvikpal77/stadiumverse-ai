@@ -8,9 +8,38 @@ export default function AIVoiceAssistant() {
   );
 
   async function askAI() {
-    const q = question.toLowerCase().trim();
+  if (!question.trim()) return;
+
+  try {
+    // 1️⃣ Try the real AI backend first
+    const ai = await DashboardService.chatAI(question);
+
+    let response =
+      ai.response ||
+      ai.answer ||
+      ai.message ||
+      "AI did not return a response.";
+
+    setAnswer(response);
+
+    const speech = new SpeechSynthesisUtterance(response);
+    speech.rate = 1;
+    speech.pitch = 1;
+    speech.volume = 1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+
+  } catch (err) {
+
+    console.error("AI Backend unavailable. Using local fallback.", err);
+
+    // 2️⃣ Fallback to local dashboard data
 
     try {
+
+      const q = question.toLowerCase().trim();
+
       const system: any = await DashboardService.getSystemStatus();
       const emergency: any = await DashboardService.getEmergencyStatus();
 
@@ -21,67 +50,92 @@ export default function AIVoiceAssistant() {
         q.includes("fire") ||
         q.includes("accident")
       ) {
+
         if (emergency.active) {
-          response = `${emergency.type} detected at ${emergency.location}. ${emergency.message} Please use ${emergency.recommended_gate}.`;
+          response =
+            `${emergency.type} detected at ${emergency.location}. ` +
+            `${emergency.message} ` +
+            `Please use ${emergency.recommended_gate}.`;
         } else {
           response = "There is currently no emergency inside the stadium.";
         }
+
       }
 
       else if (
         q.includes("gate") ||
-        q.includes("which gate") ||
         q.includes("recommended gate")
       ) {
-        response = `AI recommends using ${system.activeGate}. It currently has the shortest waiting time.`;
+
+        response =
+          `AI recommends using ${system.activeGate}. ` +
+          `It currently has the shortest waiting time.`;
+
       }
 
       else if (q.includes("crowd")) {
-        response = `Current stadium crowd level is ${system.crowdLevel} percent.`;
+
+        response =
+          `Current stadium crowd level is ${system.crowdLevel} percent.`;
+
       }
 
       else if (q.includes("weather")) {
-        response = `Current weather is ${system.weather}.`;
+
+        response =
+          `Current weather is ${system.weather}.`;
+
       }
 
       else if (q.includes("event")) {
-        response = `Today's event is ${system.event}.`;
+
+        response =
+          `Today's event is ${system.event}.`;
+
       }
 
       else if (
         q.includes("navigation") ||
         q.includes("visitor")
       ) {
-        response = `${system.navigationUsers} visitors are currently using AI Navigation.`;
+
+        response =
+          `${system.navigationUsers} visitors are currently using AI Navigation.`;
+
       }
 
       else if (
-        q.includes("health") ||
-        q.includes("stadium health")
+        q.includes("health")
       ) {
-        response = `Current stadium health score is ${system.stadiumHealth} percent.`;
+
+        response =
+          `Current stadium health score is ${system.stadiumHealth} percent.`;
+
       }
 
       else {
+
         response =
-          "I can answer questions about gates, emergencies, weather, crowd, event, navigation and stadium status.";
+          "Sorry, I couldn't connect to the AI model. Please try another question.";
+
       }
 
       setAnswer(response);
 
       const speech = new SpeechSynthesisUtterance(response);
-      speech.rate = 1;
-      speech.pitch = 1;
-      speech.volume = 1;
 
       window.speechSynthesis.cancel();
+
       window.speechSynthesis.speak(speech);
 
-    } catch (err) {
-      console.error(err);
-      setAnswer("Unable to connect to Stadium AI server.");
+    } catch {
+
+      setAnswer("Unable to connect to StadiumVerse AI.");
+
     }
+
   }
+}
 
   function startListening() {
     const SpeechRecognition =

@@ -6,7 +6,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     ENV: str = "development"
     PORT: int = 8000
-    ALLOWED_ORIGINS: Union[List[str], str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
+    ALLOWED_ORIGINS: Union[List[str], str] = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://stadiumverse-ai-alpha.vercel.app",
+    "https://stadiumverse-ai.onrender.com",
+]
     FIREBASE_CREDENTIALS_PATH: str = "app/core/firebase-adminsdk.json"
     GEMINI_API_KEY: str = ""
 

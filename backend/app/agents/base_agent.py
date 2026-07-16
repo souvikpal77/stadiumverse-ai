@@ -67,22 +67,12 @@ class BaseAgent:
 
             return "The AI returned an empty response."
 
-        except Exception as e:
+        except Exception:
             logger.exception(
                 f"Execution failed inside Agent '{self.name}'"
             )
 
-            return f"""
-===========================
-AGENT ERROR
-===========================
-
-Agent:
-{self.name}
-
-Exception:
-{type(e).__name__}
-
-Details:
-{str(e)}
-"""
+            return (
+                "I'm having trouble reaching the AI assistant right now. "
+                "Please try again in a moment."
+            )

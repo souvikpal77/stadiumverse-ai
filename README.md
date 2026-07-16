@@ -366,16 +366,35 @@ Every push automatically runs
 
 ---
 
-# 📸 Screenshots
+# 📸 Application Screenshots
 
-*(Add before final hackathon submission)*
+### 🏟 Smart Stadium Dashboard
 
-- Dashboard
-- AI Voice Assistant
-- Smart Stadium Map
-- Crowd Prediction
-- Emergency Panel
-- Parking Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+### 🤖 AI Voice Assistant
+
+![AI Assistant](screenshots/ai-assistant.png)
+
+---
+
+### 🗺 Smart Stadium Map
+
+![Smart Stadium Map](screenshots/smart-map.png)
+
+---
+
+### 🚨 Emergency Simulation
+
+![Emergency](screenshots/emergency.png)
+
+---
+
+### 👥 Crowd Prediction & Gate Recommendation
+
+![Crowd Prediction](screenshots/crowd-prediction.png)
 
 ---
 

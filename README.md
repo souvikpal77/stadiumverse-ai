@@ -2,6 +2,16 @@
 
 StadiumVerse AI is a next-generation multi-agent AI framework designed to orchestrate stadium operations, crowd safety, fan experiences, and general venue management. This workspace contains the decoupled frontend and backend foundations for the platform.
 
+## Features
+
+- 🤖 **Fan Assistant Chat** — Gemini-powered AI assistant for fan queries.
+- 🏟️ **Real-Time Stadium Dashboard** — Live crowd density, parking, weather, and system health.
+- 🚶 **Smart Navigation** — AI-assisted gate recommendations and indoor routing.
+- 📊 **Crowd Prediction** — Predicts congestion and recommends the best entry gate.
+- 🚨 **Emergency Management** — Emergency reporting and live incident monitoring.
+- 🌐 **Multi-Agent AI Architecture** — Specialized AI agents for fans, volunteers, operations, emergencies, navigation, and translation.
+- ☁️ **Cloud Deployment** — Backend deployed on Render and frontend hosted on Vercel.
+
 ## Project Structure
 
 ```

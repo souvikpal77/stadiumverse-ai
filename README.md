@@ -16,111 +16,166 @@
 
 ### 🚀 Frontend
 
-https://stadiumverse-ai-alpha.vercel.app
+👉 https://stadiumverse-ai-alpha.vercel.app
 
 ### ⚙ Backend API
 
-https://stadiumverse-ai.onrender.com
+👉 https://stadiumverse-ai.onrender.com
+
+### 💻 GitHub Repository
+
+👉 https://github.com/souvikpal77/stadiumverse-ai
 
 ---
 
 # 📖 Overview
 
-StadiumVerse AI is a next-generation **AI-powered Smart Stadium Operating System** built for the **FIFA World Cup 2026 Hackathon**.
+StadiumVerse AI is a next-generation AI-powered Smart Stadium Operating System built for the FIFA World Cup 2026 GenAI Hackathon.
 
-The platform leverages **Generative AI**, **predictive analytics**, and a **multi-agent architecture** to enhance stadium operations, crowd safety, emergency response, fan engagement, and venue intelligence.
+The platform combines **Generative AI**, **real-time analytics**, **predictive intelligence**, and **multi-agent collaboration** to improve stadium operations, crowd safety, fan engagement, navigation, and emergency management.
 
-Rather than functioning as a single chatbot, StadiumVerse AI acts as an intelligent operating system where specialized AI agents collaborate to support fans, volunteers, organizers, and stadium operators in real time.
+Instead of functioning as a traditional chatbot, StadiumVerse AI acts as an intelligent operating system where specialized AI agents work together to assist fans, volunteers, organizers, and stadium operators in real time.
+
+---
+
+# 🚀 Project Highlights
+
+- 🤖 Multi-Agent AI Architecture
+- 🏟 AI-Powered Stadium Operations
+- 🚶 Smart Indoor Navigation
+- 📊 Crowd Prediction Engine
+- 🚨 Emergency Response System
+- 🌐 Gemini AI Integration
+- ☁ Cloud-Native Deployment
+- ⚡ Automated CI/CD using GitHub Actions
 
 ---
 
 # ✨ Key Features
 
-### 🤖 AI Fan Assistant
+## 🤖 AI Fan Assistant
 
 Gemini-powered conversational assistant that answers stadium-related questions using natural language.
 
-### 🏟 Live Smart Stadium Dashboard
+---
 
-Displays live operational insights including:
+## 🏟 Smart Stadium Dashboard
 
-- Crowd density
-- Parking availability
+Live operational monitoring including
+
+- Crowd Density
+- Parking Availability
 - Weather
-- Stadium health
-- Active alerts
-
-### 🚶 Smart Indoor Navigation
-
-- AI-powered gate recommendation
-- Route optimization
-- Crowd-aware navigation
-
-### 📊 Crowd Prediction
-
-Predicts congestion before it occurs and recommends the safest entry routes.
-
-### 🚨 Emergency Management
-
-Supports:
-
-- Live emergency alerts
-- Incident monitoring
-- AI evacuation recommendations
-- Gate rerouting
-
-### 🌐 Multi-Agent AI
-
-Dedicated AI agents for:
-
-- Fan Assistance
-- Navigation
-- Crowd Intelligence
-- Emergency Operations
-- Volunteers
-- Translation
-- Stadium Operations
-
-### ☁ Cloud Deployment
-
-- Frontend deployed on **Vercel**
-- Backend deployed on **Render**
-- Automated testing using **GitHub Actions**
+- Stadium Health
+- Active Alerts
+- Recommended Entry Gate
 
 ---
 
-# 🏗 Architecture
+## 🚶 Smart Navigation
 
-The system follows a modular architecture consisting of:
-
-```
-React Frontend
-        │
-        ▼
- FastAPI Backend
-        │
-        ▼
- AI Service Layer
-        │
- ├── Fan Agent
- ├── Navigation Agent
- ├── Crowd Agent
- ├── Emergency Agent
- ├── Volunteer Agent
- ├── Translation Agent
- └── Operations Agent
-        │
-        ▼
- Gemini AI + Firebase
-```
-
-Detailed architecture is available in:
-
-- docs/architecture.md
+- AI Gate Recommendation
+- Crowd-aware Routing
+- Indoor Navigation
+- Shortest Waiting Time Prediction
 
 ---
 
-# 🛠 Tech Stack
+## 📊 Crowd Prediction
+
+Uses AI to predict crowd congestion and proactively recommend safer entry gates.
+
+---
+
+## 🚨 Emergency Management
+
+Supports
+
+- Live Emergency Alerts
+- Incident Monitoring
+- AI Evacuation Recommendations
+- Dynamic Gate Rerouting
+
+---
+
+## 🌐 Multi-Agent AI
+
+Dedicated AI agents for
+
+- 🎫 Fan Assistant
+- 🧭 Navigation
+- 👥 Crowd Intelligence
+- 🚨 Emergency Response
+- 🙋 Volunteer Assistance
+- 🌍 Translation
+- ⚙ Stadium Operations
+
+---
+
+## ☁ Cloud Deployment
+
+- Frontend → Vercel
+- Backend → Render
+- Automated CI → GitHub Actions
+
+---
+
+# 🏗 System Architecture
+
+StadiumVerse AI follows a modular multi-layer architecture designed for intelligent stadium operations.
+
+<p align="center">
+  <img src="./docs/architecture.png" alt="StadiumVerse AI Architecture" width="1000"/>
+</p>
+
+### Architecture Layers
+
+### 🎨 Frontend
+
+- React + Vite
+- Dashboard
+- AI Voice Assistant
+- Smart Stadium Map
+- Emergency Panel
+
+### ⚙ Backend
+
+- FastAPI REST APIs
+- Dashboard Service
+- Crowd Service
+- Navigation Service
+- Parking Service
+- Emergency Service
+
+### 🤖 AI Layer
+
+Gemini-powered Multi-Agent System
+
+- Fan Assistant
+- Navigation Agent
+- Crowd Prediction Agent
+- Emergency Agent
+- Translation Agent
+- Operations Agent
+
+### ☁ Data Layer
+
+- Firebase Firestore
+- Firebase Authentication
+
+### 🚀 Deployment
+
+- Vercel
+- Render
+- GitHub Actions
+
+For more information:
+
+📘 docs/architecture.md
+
+---
+
+# 🛠 Technology Stack
 
 ## Frontend
 
@@ -136,7 +191,7 @@ Detailed architecture is available in:
 - Python 3.12
 - Gemini AI
 - Firebase
-- REST API
+- REST APIs
 - Pytest
 
 ## DevOps
@@ -151,20 +206,20 @@ Detailed architecture is available in:
 # 🤖 AI Agents
 
 | Agent | Responsibility |
-|--------|---------------|
-| 🎫 Fan Assistant | Fan support & FAQs |
-| 🧭 Navigation Agent | Smart routing |
-| 👥 Crowd Agent | Crowd monitoring & prediction |
-| 🚨 Emergency Agent | Incident management |
-| 🙋 Volunteer Agent | Volunteer coordination |
-| 🌍 Translation Agent | Multilingual assistance |
-| ⚙ Operations Agent | Stadium monitoring |
+|--------|----------------|
+| 🎫 Fan Assistant | Stadium FAQs & Fan Support |
+| 🧭 Navigation Agent | Indoor Navigation |
+| 👥 Crowd Agent | Crowd Monitoring |
+| 🚨 Emergency Agent | Emergency Response |
+| 🙋 Volunteer Agent | Volunteer Assistance |
+| 🌍 Translation Agent | Multi-language Support |
+| ⚙ Operations Agent | Stadium Operations |
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 stadiumverse-ai/
 │
 ├── backend/
@@ -180,6 +235,7 @@ stadiumverse-ai/
 │
 ├── docs/
 │   ├── architecture.md
+│   ├── architecture.png
 │   ├── api.md
 │   ├── ai-modules.md
 │   └── deployment.md
@@ -213,7 +269,7 @@ copy .env.example .env
 uvicorn app.main:app --reload --port 8000
 ```
 
-Swagger Documentation
+Swagger API
 
 ```
 http://localhost:8000/docs
@@ -245,7 +301,7 @@ http://localhost:5173
 
 ## Backend
 
-```
+```env
 GEMINI_API_KEY=
 
 FIREBASE_CREDENTIALS_PATH=
@@ -253,7 +309,7 @@ FIREBASE_CREDENTIALS_PATH=
 
 ## Frontend
 
-```
+```env
 VITE_FIREBASE_API_KEY=
 
 VITE_FIREBASE_AUTH_DOMAIN=
@@ -277,7 +333,7 @@ VITE_FIREBASE_APP_ID=
 pytest
 ```
 
-✅ 13 Passing Tests
+✅ Backend tested using Pytest
 
 ---
 
@@ -287,41 +343,50 @@ pytest
 npm run test
 ```
 
-✅ Component Tests using Vitest
+✅ Frontend tested using Vitest
 
 ---
 
 ## Continuous Integration
 
-Every push automatically runs:
+Every push automatically runs
 
-- Backend Tests
-- Frontend Tests
-- GitHub Actions CI
+- ✅ Backend Tests
+- ✅ Frontend Tests
+- ✅ GitHub Actions CI
 
 ---
 
 # 📚 Documentation
 
-Detailed documentation is available inside the **docs/** folder.
-
-- Architecture
-- API
-- AI Modules
-- Deployment Guide
+- 📘 [Architecture](docs/architecture.md)
+- 📙 [API Documentation](docs/api.md)
+- 📗 [AI Modules](docs/ai-modules.md)
+- 📕 [Deployment Guide](docs/deployment.md)
 
 ---
 
 # 📸 Screenshots
 
-> *(Add screenshots here before final submission)*
+*(Add before final hackathon submission)*
 
 - Dashboard
-- AI Assistant
-- Smart Navigation
+- AI Voice Assistant
+- Smart Stadium Map
 - Crowd Prediction
-- Emergency Simulation
+- Emergency Panel
 - Parking Dashboard
+
+---
+
+# 🔮 Future Enhancements
+
+- AI CCTV Anomaly Detection
+- Indoor AR Navigation
+- IoT Sensor Integration
+- Predictive Maintenance
+- Seat Recommendation Engine
+- Digital Twin Stadium Simulation
 
 ---
 
@@ -333,12 +398,10 @@ B.Tech CSE (IoT, Cybersecurity & Blockchain)
 
 Institute of Engineering & Management, Kolkata
 
-GitHub
-
+🔗 GitHub  
 https://github.com/souvikpal77
 
-LinkedIn
-
+💼 LinkedIn  
 https://www.linkedin.com/in/souvik-pal-182453388
 
 ---
